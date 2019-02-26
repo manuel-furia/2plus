@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title> Home </ion-title>
+  </ion-navbar>
+
+  <div>
+    <ion-row text-center="true" *ngIf="userAuth.hasLoggedIn">
+      <ion-col>
+        <button (click)="goToSearchPage()" ion-button round small color="secondary"> Search</button>
+        <button (click)="goToUploadPage()" ion-button  round small color="secondary"> Upload</button>
+        <button (click)="goToMyItemsPage()" ion-button round small color="primary"> My Items</button>
+      </ion-col>
+    </ion-row>
+
+    <ion-row text-center="true" *ngIf="!userAuth.hasLoggedIn">
+      <ion-col>
+        <button (click)="goToLoginPage()" ion-button round small color="secondary"> Login/Register</button>
+        <button (click)="goToSearchPage()" ion-button round small color="primary"> Search</button>
+      </ion-col>
+    </ion-row>
+  </div>
+
+</ion-header>
+
+<ion-content padding>
+
+
+
+  <ion-list>
+
+    <ion-item *ngFor="let media of mediaArray | async">
+      <ion-thumbnail item-start="">
+        <img [src]= "mediaStoragePath + (media.file_id | thumbnail:'default' | async)" [alt]="media.title" >
+      </ion-thumbnail>
+
+      <h2>{{media.title}}</h2>
+      <p>{{media.time_added | date: ('dd.MM.yy')}}</p>  <!--MM: month mm: minuit-->
+      <p>{{media.description}}</p>
+
+      <button ion-button clear item-end (click)="viewBiggerImg(media.file_id)">View</button>
+    </ion-item>
+
+  </ion-list>
+
+
+</ion-content>

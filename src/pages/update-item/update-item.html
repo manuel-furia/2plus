@@ -1,0 +1,71 @@
+<!--
+  Generated template for the UpdateItemPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>update</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <form  #modifyForm="ngForm" (ngSubmit)="updateItemInfo()" name="modifyForm" #modifyForm="ngForm" id="modifyForm">
+
+    <div class="form-group">
+      <ion-label stacked>title</ion-label>
+      <ion-input type="text"
+                 class="form-control"
+                 placeholder="new title"
+                 [(ngModel)]="title"
+                 id="newtitle"
+                 name="newtitle"
+                 #newtitle="ngModel"
+                 maxlength="20"
+                 minlength="3">
+      </ion-input>
+      <div class="form-control-feedback"  *ngIf="newtitle.errors && (newtitle.dirty || newtitle.touched)">
+        <p *ngIf="newtitle.errors" style="color: #f53d3d">title needs to be 3-20 characters</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <ion-label stacked>description</ion-label>
+      <ion-textarea type="text"
+                    [(ngModel)]="description"
+                    class="form-control"
+                    placeholder="new description"
+                    name="newDescription"
+                    id="newDescription"
+                    #newDescription="ngModel"
+                    minlength="10"
+                    maxlength="100">
+
+      </ion-textarea>
+      <div class="form-control-feedback"
+           *ngIf="newDescription.errors && (newDescription.dirty || newDescription.touched)">
+        <p *ngIf="newDescription.errors" style="color: #f53d3d">description length needs to be 10-100 characters</p>
+      </div>
+    </div>
+
+    <ion-row>
+      <button ion-button
+              type="submit"
+              round
+              large
+              color="secondary"
+              [disabled]="!modifyForm.form.valid">Update</button >
+    </ion-row>
+
+    <button ion-button
+            type="button"
+            large
+            round
+            color="danger"
+            (click)="cancelModify()">Cancel</button>
+
+  </form>
+
+</ion-content>

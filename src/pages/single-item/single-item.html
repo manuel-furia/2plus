@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>single-item</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card *ngIf="file">
+    <ion-item>
+      <h1> {{file.title}} </h1>
+      <h3>user: {{username}}</h3>
+      <h3 *ngIf="file.description !==null">description: {{file.description}}</h3>
+      <h3>publish date: {{file.time_added | date: ('dd.MM.yy')}}</h3>
+
+    </ion-item>
+
+
+    <pinch-zoom *ngIf="file.media_type==='image'">
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+      <img [src]="uploadUrl + file.filename">
+    </pinch-zoom>
+
+    <video *ngIf="file.media_type==='video'" width="320" height="240" controls>
+      <source [src]="uploadUrl + file.filename" type="video/mp4">
+      <!--<source [src]="uploadUrl + file.filename" type="video/ogg">-->
+      Your browser does not support the video tag.
+    </video>
+
+    <audio controls *ngIf="file.media_type==='audio'">
+      <source [src]="uploadUrl + file.filename" type="audio/ogg">
+      <!--<source src="horse.mp3" type="audio/mpeg">-->
+      Your browser does not support the audio tag.
+    </audio>
+
+    <!--<img src="#image" [src]= "uploadUrl + " [alt]="pic.title" >-->
+
+  </ion-card>
+</ion-content>
