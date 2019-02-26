@@ -1,0 +1,40 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>profile</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="card-background-page">
+
+  <ion-card>
+    <img [src]="filePath + ('profile' | getTags | async| thumbnail:'large' | async)"/>
+
+    <div class="card-title">
+      username: {{userAuth.user.username}}
+    </div>
+    <div class="card-subtitle" *ngIf="userAuth.user.full_name">
+     full name: {{ userAuth.user.full_name}}
+    </div>
+    <div class="card-subtitle">
+      email: {{userAuth.user.email}}
+    </div>
+
+  </ion-card>
+
+  <div  text-center>
+    <button ion-button round
+            (click)="goToMyItemsPage()" color="primary"> My Items </button>
+  </div>
+
+  <div  text-center>
+    <button ion-button round color="danger" item-start="end" (click)="logout()">Logout</button>
+  </div>
+
+  <div  text-center>
+    <button ion-button round color="danger" item-start="end" (click)="deleteAccount()">Delete Account</button>
+  </div>
+</ion-content>

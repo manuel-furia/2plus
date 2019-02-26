@@ -1,0 +1,136 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>login/register</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <form #loginForm="ngForm" (ngSubmit)="login()" autocomplete="off" *ngIf="!showRegisterForm">
+    <ion-row>
+      <ion-col>
+        <ion-list>
+
+          <ion-label stacked text-center>Username</ion-label>
+          <ion-input stacked text-center type="text" placeholder="Username" name="username" [(ngModel)]="user.username"
+                     required></ion-input>
+
+          <ion-label stacked text-center>Password</ion-label>
+          <ion-input type="password" text-center placeholder="Password" name="password" [(ngModel)]="user.password"
+                     required></ion-input>
+
+        </ion-list>
+      </ion-col>
+    </ion-row>
+
+    <div text-center>
+      <button ion-button round default class="submit-btn" type="submit" [disabled]="!loginForm.form.valid">Login
+      </button>
+    </div>
+
+  </form>
+
+  <div text-center *ngIf="!showRegisterForm" >
+    <button ion-button
+            class="register-btn" clear round
+            style="color: deeppink"
+            (click)="showLoginFormOrRegisterForm()">Create new account
+    </button>
+  </div>
+
+  <form *ngIf="showRegisterForm" (ngSubmit)="register()" name="registerForm" #registerForm="ngForm" id="registerForm">
+
+    <ion-list>
+      <div class="form-group">
+        <ion-label stacked text-center>Username</ion-label>
+        <ion-input type="text"
+                   text-center
+                   class="form-control"
+                   name="username"
+                   id="username"
+                   required
+                   pattern="[A-Za-z]{3,}"
+                   minlength="3"
+                   placeholder="at least 3 letters (no numbers or special characters)"
+                   [(ngModel)]="user.username"
+                   #username="ngModel"
+                   (ionBlur)="checkUsername()"></ion-input>
+        <div class="form-control-feedback" text-center
+             *ngIf="username.errors && (username.dirty || username.touched)">
+          <p *ngIf="username.errors" style="color: #f53d3d">Username is required and needs to be at least 3 letters (no numbers or special
+            characters)</p>
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+        <ion-label stacked text-center>Email</ion-label>
+        <ion-input type="text"
+                   text-center
+                   class="form-control"
+                   placeholder="example@email.com"
+                   name="email"
+                   id="email"
+                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                   [(ngModel)]="user.email"
+                   #email="ngModel"
+                   required></ion-input>
+        <div class="form-control-feedback" text-center
+             *ngIf="email.errors && (email.dirty || email.touched)">
+          <p *ngIf="email.errors" style="color: #f53d3d">Email format: characters@characters.domain</p>
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+        <ion-label stacked text-center>Password</ion-label>
+        <ion-input type="password"
+                   text-center
+                   placeholder="at least 8 characters of at least one number, one uppercase and lowercase letter"
+                   name="password"
+                   id="password"
+                   [(ngModel)]="user.password"
+                   #password="ngModel"
+                   required
+                   pattern="(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+        </ion-input>
+        <div class="form-control-feedback" text-center
+             *ngIf="password.errors && (password.dirty || password.touched)">
+          <p *ngIf="password.errors" style="color: #f53d3d">Password needs to be at least 8 characters containing at least one number, one
+            uppercase and lowercase letter</p>
+        </div>
+
+      </div>
+
+      <ion-label stacked text-center>Confirm Password</ion-label>
+      <ion-input type="password"
+                 text-center
+                 placeholder="type password again"
+                 name="confirmation_password"
+                 [(ngModel)]="confirm_password"
+                 required
+                 (ionBlur)="verifyPassword()"></ion-input>
+
+    </ion-list>
+
+    <div text-center>
+      <button ion-button class="submit-btn" round type="submit" [disabled]="!registerForm.form.valid">Register</button>
+    </div>
+  </form>
+
+
+  <div text-center *ngIf="showRegisterForm">
+    <button ion-button class="register-btn" clear round
+            style="color: deeppink"
+            (click)="showLoginFormOrRegisterForm()">already have an account?
+    </button>
+  </div>
+
+  <div text-center>
+    <button ion-button clear round
+            style="color: #0000e0"
+            (click)="goToHomePage()">Continue as guest user</button>
+  </div>
+
+</ion-content>

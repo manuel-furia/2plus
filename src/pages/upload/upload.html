@@ -1,0 +1,120 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>upload</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <form  #uploadForm="ngForm" (ngSubmit)="uploadMedia()">
+    <div class="form-group">
+      <ion-label stacked>title</ion-label>
+      <ion-input type="text"
+                 placeholder="3-20 characters"
+                 [(ngModel)]="title"
+                 name="title"
+                 #fileTitle="ngModel"
+                 required
+                 maxlength="20"
+                 minlength="3">
+      </ion-input>
+      <div class="form-control-feedback"  *ngIf="fileTitle.errors && (fileTitle.dirty || fileTitle.touched)">
+        <p *ngIf="fileTitle.errors" style="color: #f53d3d">title needs to be 3-20 characters</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <ion-label stacked>description</ion-label>
+      <ion-textarea type="text"
+                    [(ngModel)]="description"
+                    placeholder="10-100 characters"
+                    name="description"
+                    #fileDescription="ngModel"
+                    required
+                    minlength="10"
+                    maxlength="100"></ion-textarea>
+      <div class="form-control-feedback"  *ngIf="fileDescription.errors && (fileDescription.dirty || fileDescription.touched)">
+        <p *ngIf="fileDescription.errors" style="color: #f53d3d">description length needs to be 10-100 characters</p>
+      </div>
+    </div>
+
+    <!--use plugin chooser-->
+    <ion-row justify-content-center>
+    <button ion-button
+            type="button"
+            round
+            color="primary"
+            (click)="chooseFile()">Choose file</button>
+    </ion-row>
+    <ion-row justify-content-center>
+    <button ion-button
+            type="button"
+            round
+            color="primary"
+            (click)="useCamera()">Use camera</button>
+    </ion-row>
+
+    <ion-row justify-content-center>
+      <button ion-button
+              type="submit"
+              round
+              color="secondary"
+              [disabled]="!uploadForm.form.valid || !hasFile">Upload</button >
+    </ion-row>
+
+    <ion-row justify-content-center>
+    <button ion-button
+            type="button"
+            round
+            color="danger"
+            (click)="cancelUpload()">Cancel</button>
+    </ion-row>
+
+  </form>
+
+
+
+  <ion-card *ngIf="filedata">
+    <img alt=""
+         #preview [src]="filedata"
+         [ngStyle]="{'filter':
+         'brightness('+filters.brightness/100+') ' +
+          'contrast('+filters.contrast/100+') ' +
+           'saturate('+filters.saturation/100+') ' +
+            'sepia('+filters.warmth/100+')'}" >
+
+    <div *ngIf="isImage">
+      <ion-item>
+        <ion-range min="0" max="200" step="1" [(ngModel)]="filters.brightness">
+          <ion-icon small range-left name="sunny"></ion-icon>
+          <ion-icon range-right name="sunny"></ion-icon>
+        </ion-range>
+      </ion-item>
+
+      <ion-item>
+        <ion-range min="0" max="200" step="1" [(ngModel)]="filters.contrast">
+          <ion-icon small range-left name="contrast"></ion-icon>
+          <ion-icon range-right name="contrast"></ion-icon>
+        </ion-range>
+      </ion-item>
+
+      <ion-item>
+        <ion-range min="0" max="200" step="1" [(ngModel)]="filters.saturation">
+          <ion-icon small range-left name="water"></ion-icon>
+          <ion-icon range-right name="water"></ion-icon>
+        </ion-range>
+      </ion-item>
+
+      <ion-item>
+        <ion-range min="0" max="100" step="1" [(ngModel)]="filters.warmth">
+          <ion-icon small range-left name="thermometer"></ion-icon>
+          <ion-icon range-right name="thermometer"></ion-icon>
+        </ion-range>
+      </ion-item>
+
+    </div>
+  </ion-card>
+</ion-content>
