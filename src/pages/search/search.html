@@ -15,7 +15,7 @@
         <ion-input placeholder="search term"
                    required
                    type="text"
-                   name="location"
+                   name="searchTerm"
                    id="searchTerm"
                    [(ngModel)]="searchTerm">
         </ion-input>
@@ -75,5 +75,22 @@
       </button>
     </div>
   </form>
+
+  <ion-list *ngIf="!showSearchForm">
+
+    <ion-item *ngFor="let media of mediaArray | async">
+      <ion-thumbnail item-start="">
+        <img [src]= "uploadUrl + (media.file_id | thumbnail:'default' | async)" [alt]="media.title" >
+      </ion-thumbnail>
+
+      <h2>{{media.title}}</h2>
+      <p>{{media.time_added | date: ('dd.MM.yy')}}</p>  <!--MM: month mm: minuit-->
+      <p>{{media.description}}</p>
+
+      <button ion-button round  (click)="viewSingleMedia(media.file_id)">View</button>
+
+    </ion-item>
+
+  </ion-list>
 
 </ion-content>
