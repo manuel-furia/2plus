@@ -1,9 +1,3 @@
-<!--
-  Generated template for the SearchPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
   <ion-navbar>
     <ion-title>Search</ion-title>
@@ -11,5 +5,75 @@
 </ion-header>
 
 <ion-content padding>
+  <form *ngIf="showSearchForm" (ngSubmit)="search()" name="searchForm" #searchForm="ngForm" id="searchForm">
+
+    <ion-title text-center style="color: #488aff; font-size: large; font-weight: bolder">Filter</ion-title>
+
+    <ion-row>
+      <ion-item>
+        <ion-label style="color: blue; font-size: large">Keyword</ion-label>
+        <ion-input placeholder="search term"
+                   required
+                   type="text"
+                   name="location"
+                   id="searchTerm"
+                   [(ngModel)]="searchTerm">
+        </ion-input>
+      </ion-item>
+    </ion-row>
+
+    <ion-row>
+      <ion-item>
+        <ion-label style="color: blue; font-size: large">Publish Date</ion-label>
+        <ion-select [(ngModel)]="publishDate" name="publishDate">
+          <ion-option value="day">Today</ion-option>
+          <ion-option value="week">This Week</ion-option>
+          <ion-option value="month">This Month</ion-option>
+          <ion-option value="year">This Year</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-row>
+
+    <ion-row>
+      <ion-item>
+        <ion-label style="color: blue; font-size: large">Price</ion-label>
+        <ion-select [(ngModel)]="priceOrder" name="priceOrder">
+          <ion-option value="ascend">ascending</ion-option>
+          <ion-option value="descend">descending</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-row>
+
+    <ion-row>
+      <ion-item>
+        <ion-label style="color: blue; font-size: large">Location</ion-label>
+        <ion-input type="text"
+                   placeholder="enter a location"
+                   name="location"
+                   id="location"
+                   [(ngModel)]="location">
+        </ion-input>
+      </ion-item>
+
+    </ion-row>
+    <div text-center>
+      <button ion-button
+              class="submit-btn"
+              round
+              type="submit"
+              color="secondary"
+              [disabled]="!searchForm.form.valid">Search
+      </button>
+    </div>
+
+    <div text-center>
+      <button ion-button
+              round
+              type="button"
+              color="danger"
+              (click)="cancelSearch()">Cancel
+      </button>
+    </div>
+  </form>
 
 </ion-content>
