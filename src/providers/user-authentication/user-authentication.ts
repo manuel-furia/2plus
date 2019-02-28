@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../../interfaces/user';
-import { LoginResponse } from '../../interfaces/loginResponse';
+import { Response } from '../../interfaces/response';
 
 @Injectable()
 export class UserAuthenticationProvider {
@@ -22,7 +22,7 @@ export class UserAuthenticationProvider {
         'Content-type': 'application/json'
       })
   };
-    return this.http.post<LoginResponse>(loginPath, user, httpOptions);
+    return this.http.post<Response>(loginPath, user, httpOptions);
   }
 
 

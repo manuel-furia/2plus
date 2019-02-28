@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AlertController, ToastController } from 'ionic-angular';
 import { Media } from '../../interfaces/media';
 import { User } from '../../interfaces/user';
-import { LoginResponse } from '../../interfaces/loginResponse';
+import { Response } from '../../interfaces/response';
 
 @Injectable()
 export class MediaProvider {
@@ -24,7 +24,7 @@ export class MediaProvider {
 //TODO: get all media by tag:2plus?
   getMediaByTag(tag){
     //const url:string = 'http://media.mw.metropolia.fi/wbma/media?start=100&limit=5';
-    const mediaPath:string = 'http://media.mw.metropolia.fi/wbma/media/tags/'+tag;
+    const mediaPath:string = 'http://media.mw.metropolia.fi/wbma/tags/'+tag;
 
     return this.http.get<Media[]>(mediaPath);
   }
@@ -66,7 +66,7 @@ export class MediaProvider {
       }),
     };
     const uploadPath:string = "http://media.mw.metropolia.fi/wbma/media";
-    return this.http.post<LoginResponse>(uploadPath, data, httpOptions);
+    return this.http.post<Response>(uploadPath, data, httpOptions);
   }
 
 
@@ -100,7 +100,19 @@ export class MediaProvider {
         'x-access-token': accessToken
       }),
     };
-    return this.http.put<LoginResponse>(modifyFilePath, data, httpOptions);
+    return this.http.put<Response>(modifyFilePath, data, httpOptions);
+  }
+
+
+  setTag(data:any){
+    const setTagPath = 'http://media.mw.metropolia.fi/wbma/tags';
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-type': 'application/json',
+        'x-access-token': localStorage.getItem('token')
+      }),
+    };
+    return this.http.post(setTagPath, data, httpOptions);
 
   }
 
@@ -111,7 +123,7 @@ export class MediaProvider {
         'x-access-token': localStorage.getItem('token')
       }),
     };
-    return this.http.delete<LoginResponse>(deleteFilePath, httpOptions);
+    return this.http.delete<Response>(deleteFilePath, httpOptions);
   }
 
   deleteUser(userID){
@@ -121,7 +133,7 @@ export class MediaProvider {
         'x-access-token': localStorage.getItem('token')
       }),
     };
-    return this.http.delete<LoginResponse>(deleteUserPath, httpOptions);
+    return this.http.delete<Response>(deleteUserPath, httpOptions);
   }
 
 
