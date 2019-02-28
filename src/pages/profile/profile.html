@@ -11,7 +11,8 @@
 <ion-content class="card-background-page">
 
   <ion-card>
-    <img [src]="filePath + ('profile' | getTags | async| thumbnail:'large' | async)"/>
+    <!--<img [src]="filePath + ('profile' | getTags | async| thumbnail:'large' | async)"/>-->
+    <img *ngIf="avatarID != null" [src]="filePath + (avatarID| thumbnail:'large' | async)"/>
 
     <div class="card-title">
       username: {{userAuth.user.username}}
@@ -26,8 +27,12 @@
   </ion-card>
 
   <div  text-center>
+    <button ion-button round (click)="setAvatar()"> Update Avatar </button>
+  </div>
+
+  <div  text-center>
     <button ion-button round
-            (click)="goToMyItemsPage()" color="primary"> My Items </button>
+            (click)="goToMyItemsPage()" color="primary"> Manage My Items </button>
   </div>
 
   <div  text-center>
