@@ -14,32 +14,99 @@
     <!--<img [src]="filePath + ('profile' | getTags | async| thumbnail:'large' | async)"/>-->
     <img *ngIf="avatarID != null" [src]="filePath + (avatarID| thumbnail:'large' | async)"/>
 
-    <div class="card-title">
-      username: {{userAuth.user.username}}
-    </div>
-    <div class="card-subtitle" *ngIf="userAuth.user.full_name">
-     full name: {{ userAuth.user.full_name}}
-    </div>
-    <div class="card-subtitle">
-      email: {{userAuth.user.email}}
-    </div>
+    <ion-card-header>
+      <ion-card-title>username: {{userAuth.user.username}}</ion-card-title>
+      <ion-card-title *ngIf="userAuth.user.full_name">full name: {{ userAuth.user.full_name}}</ion-card-title>
+      <ion-card-title>email: {{userAuth.user.email}}</ion-card-title>
+    </ion-card-header>
 
   </ion-card>
 
   <div  text-center>
-    <button ion-button round (click)="setAvatar()"> Update Avatar </button>
+    <button ion-button round block (click)="setAvatar()"> Update Avatar </button>
   </div>
 
   <div  text-center>
-    <button ion-button round
+    <button ion-button round block (click)="showUserInfoForm()"> Update User Info </button>
+    <form *ngIf="showUpdateForm" (ngSubmit)="updateUserInfo()" name="updateUserInfoForm" #updateUserInfoForm="ngForm" id="updateUserInfoForm">
+    <ion-list>
+      <div class="form-group">
+        <ion-label stacked text-center>Username</ion-label>
+        <ion-input type="text"
+                   text-center
+                   class="form-control"
+                   name="username"
+                   id="username"
+                   pattern="[A-Za-z]{3,}"
+                   minlength="3"
+                   placeholder="at least 3 letters (no numbers or special characters)"
+                   [(ngModel)]="user.username"
+                   #username="ngModel"
+                   (ionBlur)="checkUsername()"></ion-input>
+        <div class="form-control-feedback" text-center
+             *ngIf="username.errors && (username.dirty || username.touched)">
+          <p *ngIf="username.errors" style="color: #f53d3d">Username is required and needs to be at least 3 letters (no numbers or special
+            characters)</p>
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+        <ion-label stacked text-center>Email</ion-label>
+        <ion-input type="text"
+                   text-center
+                   class="form-control"
+                   placeholder="example@email.com"
+                   name="email"
+                   id="email"
+                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                   [(ngModel)]="user.email"
+                   #email="ngModel"
+                   ></ion-input>
+        <div class="form-control-feedback" text-center
+             *ngIf="email.errors && (email.dirty || email.touched)">
+          <p *ngIf="email.errors" style="color: #f53d3d">Email format: characters@characters.domain</p>
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+        <ion-label stacked text-center>Password</ion-label>
+        <ion-input type="password"
+                   text-center
+                   placeholder="at least 8 characters of at least one number, one uppercase and lowercase letter"
+                   name="password"
+                   id="password"
+                   [(ngModel)]="user.password"
+                   #password="ngModel"
+                   pattern="(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+        </ion-input>
+        <div class="form-control-feedback" text-center
+             *ngIf="password.errors && (password.dirty || password.touched)">
+          <p *ngIf="password.errors" style="color: #f53d3d">Password needs to be at least 8 characters containing at least one number, one
+            uppercase and lowercase letter</p>
+        </div>
+
+      </div>
+    </ion-list>
+      <div text-center>
+        <button ion-button class="submit-btn" round block type="submit" [disabled]="!updateUserInfoForm.form.valid">Update</button>
+      </div>
+    </form>
+  </div>
+
+  <div  text-center>
+    <button ion-button round block
             (click)="goToMyItemsPage()" color="primary"> Manage My Items </button>
   </div>
 
   <div  text-center>
-    <button ion-button round color="danger" item-start="end" (click)="logout()">Logout</button>
+    <button ion-button round block color="danger" item-start="end" (click)="logout()">Logout</button>
   </div>
 
   <div  text-center>
-    <button ion-button round color="danger" item-start="end" (click)="deleteAccount()">Delete Account</button>
+    <button ion-button round block color="danger" item-start="end" (click)="deleteAccount()">Delete Account</button>
   </div>
 </ion-content>

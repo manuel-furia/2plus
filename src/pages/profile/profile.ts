@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { MediaProvider } from '../../providers/media/media';
 import { UserAuthenticationProvider } from '../../providers/user-authentication/user-authentication';
@@ -6,6 +6,7 @@ import { MyItemsPage } from '../my-items/my-items';
 import { UploadPage } from '../upload/upload';
 import { SingleItemPage } from '../single-item/single-item';
 import { Media } from '../../interfaces/media';
+import { User } from '../../interfaces/user';
 
 
 @IonicPage()
@@ -23,6 +24,10 @@ export class ProfilePage {
 
   public filePath = 'http://media.mw.metropolia.fi/wbma/uploads/';
   avatarID;
+  user:User={};
+  showUpdateForm: boolean = false;
+  @ViewChild('updateUserInfoForm') updateUserInfoForm: any;
+
 
   ngOnInit(){
     this.getAvatar();
@@ -76,4 +81,28 @@ export class ProfilePage {
     })
   }
 
+  updateUserInfo() {
+    this.mediaProvider.updateUserInfo(this.user).subscribe(res=>{
+      console.log('update user data res: ', res.message);
+      this.mediaProvider.presentToast(res.message);
+
+      this.updateUserInfoForm.reset();
+      this.showUpdateForm = false;
+      this.navCtrl.push(ProfilePage);
+    })
+
+  }
+
+  checkUsername() {
+    this.userAuth.checkUsername(this.user.username).subscribe(res => {
+      console.log('check username availability res: ', res);
+      if (res['available'] !== true) {
+        alert('username is taken!');
+      }
+    });
+  }
+
+  showUserInfoForm() {
+    this.showUpdateForm = true;
+  }
 }
