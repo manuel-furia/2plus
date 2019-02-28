@@ -136,7 +136,6 @@ export class MediaProvider {
     return this.http.delete<Response>(deleteUserPath, httpOptions);
   }
 
-
   search(data:object){
     const searchMediaPath:string = "http://media.mw.metropolia.fi/wbma/media/search";
     const httpOptions = {
@@ -148,6 +147,16 @@ export class MediaProvider {
     return this.http.post<Media[]>(searchMediaPath, data, httpOptions);
   }
 
+  updateUserInfo(data){
+    const updateUserDataPath:string = "http://media.mw.metropolia.fi/wbma/users/";
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-type': 'application/json',
+        'x-access-token': localStorage.getItem('token')
+      }),
+    };
+    return this.http.put<Response>(updateUserDataPath, data, httpOptions);
+  }
 
 
   //show confirmation alert before deleting a file
