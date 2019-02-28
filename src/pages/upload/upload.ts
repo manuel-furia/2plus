@@ -9,6 +9,7 @@ import { MediaProvider } from '../../providers/media/media';
 import { HomePage } from '../home/home';
 import { Chooser } from '@ionic-native/chooser';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { stringify, unescape } from 'querystring';
 
 @IonicPage()
 @Component({
@@ -30,7 +31,8 @@ export class UploadPage {
     console.log('ionViewDidLoad UploadPage');
   }
 
-  filedata = '';
+  file: any;
+  filePath = '';
   title = '';
   description = '';
   public myBlob: Blob;
@@ -68,7 +70,7 @@ export class UploadPage {
 
   showPreview(file) {
 
-    this.myBlob = new Blob(
+    this.file = new Blob(
       [file.data], {
         type: file.mediaType
       });
@@ -78,15 +80,15 @@ export class UploadPage {
       // reader.result contains the contents of blob as a typed array
       reader.result;
     });
-    reader.readAsArrayBuffer(this.myBlob);
-    console.log('myfile: ', this.myBlob);
+    reader.readAsArrayBuffer(this.file);
+    console.log('myfile: ', this.file);
 
     if (file.mediaType.includes('video')) {
-      this.filedata = 'http://via.placeholder.com/500X200/000?text=Video';
+      this.filePath = 'http://via.placeholder.com/500X200/000?text=Video';
     } else if (file.mediaType.includes('audio')) {
-      this.filedata = 'http://via.placeholder.com/500X200/000?text=Audio';
+      this.filePath = 'http://via.placeholder.com/500X200/000?text=Audio';
     } else {
-      this.filedata = file.dataURI;
+      this.filePath = file.dataURI;
       // if(file.mediaType.includes('image')){}
       this.isImage = true;
     }
@@ -94,26 +96,28 @@ export class UploadPage {
   }
 
   public uploadMedia(){
-    const description = `[d]${this.description}[/d]`;
+    //const description = `[d]${this.description}[/d]`;
+    const description = this.description;
     const filters = `[f]${JSON.stringify(this.filters)}[/f]`;
-
-    // show spinner
-    this.loading.present().catch();
-
     const formData = new FormData();
     formData.append('title', this.title);
     console.log('title: ', this.title);
 
-    formData.append('description', description + filters);
+    formData.append('description', description);
     console.log('description: ', description);
 
+    //formData.append('filter', filters);
+
     //formData.append('file', this.file);
-    formData.append('file', this.myBlob);
-    console.log('form data append, my blob: ', this.myBlob);
+    formData.append('file', this.file);
+    console.log('form data append file: ', this.file);
 
     this.mediaProvider.uploadMedia( formData).subscribe(response => {
 
-      console.log('upload media response', response);
+      console.log('upload media response: ', response);
+
+      // show spinner
+      this.loading.present().catch();
 
       // setTimeout 2. secs
       setTimeout(() => {
@@ -125,13 +129,62 @@ export class UploadPage {
       if(response.message ==="file uploaded"){
         // this.navCtrl.pop();
         console.log('file uploaded');
-        //this.mediaProvider.presentToast(response.message);
+        this.mediaProvider.presentToast(response.message);
        // this.uploadForm.reset();
-        this.navCtrl.popTo(HomePage);
+       // this.navCtrl.popTo(HomePage);
+        this.navCtrl.push(HomePage);
       }
 
     });
 
+  }
+
+
+
+  useCamera() {
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+    };
+
+    this.camera.getPicture(options).then((imageData) => {
+
+        this.hasFile = true;
+
+        let base64Image = 'data:image/jpeg;base64,' + imageData;
+        this.filePath = base64Image;
+
+        this.file = this.dataURItoBlob(base64Image);
+
+      },
+      (error) => {
+        console.log(error);
+      });
+
+  }
+
+
+  dataURItoBlob(dataURI) {
+    let byteString;
+    let mimeString;
+    let ia;
+
+    if (dataURI.split(',')[0].indexOf('base64') >= 0) {
+      byteString = atob(dataURI.split(',')[1]);
+    } else {
+      byteString = encodeURI(dataURI.split(',')[1]);
+    }
+    // separate out the mime component
+    mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+    // write the bytes of the string to a typed array
+    ia = new Uint8Array(byteString.length);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ia], {type:mimeString});
   }
 
 
@@ -140,61 +193,10 @@ export class UploadPage {
   });
 
 
-
-  useCamera() {
-    const options: CameraOptions = {
-      quality: 100,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
-    };
-
-    this.camera.getPicture(options).then((imageData) => {
-      // imageData is either a base64 encoded string or a file URI
-      // If it's base64 (DATA_URL):
-      if(imageData){
-
-        console.log('image data: ', imageData);
-        this.filedata = 'data:image/jpeg;base64,' + imageData;
-        this.hasFile = true;
-        this.dataURItoBlob(imageData);
-      }
-
-    }, (err) => {
-      // Handle error
-      console.log("Camera issue: " + err);
-    });
-  }
-
-  //TODO: UPLOAD PHOTO TAKEN BY CAMERA
-  //this is not working yet...
-  dataURItoBlob(dataURI) {
-    var byteString, mimestring;
-
-    if(dataURI.split(',')[0].indexOf('base64') !== -1 ) {
-      byteString = atob(dataURI.split(',')[1])
-    } else {
-      byteString = decodeURI(dataURI.split(',')[1])
-    }
-
-    mimestring = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-    let content = [];
-    for (let i = 0; i < byteString.length; i++) {
-      content[i] = byteString.charCodeAt(i)
-    }
-
-    this.myBlob = new Blob([new Uint8Array(content)], {type: mimestring});
-    console.log('dataURI to blob, my blob: ', this.myBlob);
-    return this.myBlob;
-  }
-
-
-
   cancelUpload() {
     console.log('reset form');
     this.uploadForm.reset();
-    this.filedata='';
+    this.filePath='';
     this.isImage=false;
   }
 

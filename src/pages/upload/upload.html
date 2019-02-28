@@ -16,8 +16,8 @@
                  placeholder="3-20 characters"
                  [(ngModel)]="title"
                  name="title"
-                 #fileTitle="ngModel"
                  required
+                 #fileTitle="ngModel"
                  maxlength="20"
                  minlength="3">
       </ion-input>
@@ -32,8 +32,8 @@
                     [(ngModel)]="description"
                     placeholder="10-100 characters"
                     name="description"
-                    #fileDescription="ngModel"
                     required
+                    #fileDescription="ngModel"
                     minlength="10"
                     maxlength="100"></ion-textarea>
       <div class="form-control-feedback"  *ngIf="fileDescription.errors && (fileDescription.dirty || fileDescription.touched)">
@@ -77,9 +77,9 @@
 
 
 
-  <ion-card *ngIf="filedata">
+  <ion-card *ngIf="filePath">
     <img alt=""
-         #preview [src]="filedata"
+         #preview [src]="filePath"
          [ngStyle]="{'filter':
          'brightness('+filters.brightness/100+') ' +
           'contrast('+filters.contrast/100+') ' +
