@@ -85,7 +85,7 @@ export class MediaProvider {
 
     return this.http.get<Media[]>(allMediaOfSingleUserPath);
   }
-
+  
 
   updateItemInfo(file_id, data:any){
     console.log('media provider: modify media info');

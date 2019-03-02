@@ -18,7 +18,6 @@ import { ProfilePage } from '../profile/profile';
   templateUrl: 'upload.html',
 })
 
-
 export class UploadPage {
 
   file: any;
@@ -26,13 +25,13 @@ export class UploadPage {
   title = '';
   description = '';
   public myBlob: Blob;
-  public isImage:Boolean = false;
-  public hasFile:Boolean = false;
+  public isImage: Boolean = false;
+  public hasFile: Boolean = false;
   @ViewChild('uploadForm') uploadForm: any;
 
-  profileTag:{};
-  tag:string = '';
-  profileImgID:number;
+  profileTag: {};
+  tag: string = '';
+  profileImgID: number;
 
   filters = {
     brightness: 100,
@@ -41,13 +40,13 @@ export class UploadPage {
     saturation: 100,
   };
 
-
-  constructor(private chooser:Chooser,
-              private camera:Camera,
-              public navCtrl: NavController,
-              public navParams: NavParams,
-              public loadingCtrl: LoadingController,
-              public mediaProvider: MediaProvider) {
+  constructor(
+    private chooser: Chooser,
+    private camera: Camera,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public loadingCtrl: LoadingController,
+    public mediaProvider: MediaProvider) {
     this.tag = this.navParams.get('tag');
     console.log('getting tag passed from profile page: ', this.tag);
   }
@@ -56,25 +55,20 @@ export class UploadPage {
     console.log('ionViewDidLoad UploadPage');
   }
 
-
-
-
-  private chooseFile(){
-    this.chooser.getFile("image/*, video/!*, audio/!*")
-    .then(file => {
-      if(file){
+  private chooseFile() {
+    this.chooser.getFile('image/*, video/!*, audio/!*').then(file => {
+      if (file) {
         console.log(file ? file.name : 'canceled');
-       // console.log(file.dataURI);
+        // console.log(file.dataURI);
         console.log(file.mediaType);
         //console.log(file.uri);
         this.hasFile = true;
         this.showPreview(file);
 
-      }else {
-        alert("please choose a file to upload");
+      } else {
+        alert('please choose a file to upload');
       }
-    })
-    .catch((error: any) => console.error(error));
+    }).catch((error: any) => console.error(error));
 
   }
 
@@ -82,16 +76,16 @@ export class UploadPage {
 
     this.file = new Blob(
       [file.data], {
-        type: file.mediaType
+        type: file.mediaType,
       });
 
     const reader = new FileReader();
-    reader.addEventListener("loadend", function() {
+    reader.addEventListener('loadend', function() {
       // reader.result contains the contents of blob as a typed array
       reader.result;
     });
     reader.readAsArrayBuffer(this.file);
-   // console.log('myfile: ', this.file);
+    // console.log('myfile: ', this.file);
 
     if (file.mediaType.includes('video')) {
       this.filePath = 'http://via.placeholder.com/500X200/000?text=Video';
@@ -105,26 +99,30 @@ export class UploadPage {
 
   }
 
-  private uploadMedia(){
+  private uploadMedia() {
     const formData = this.getFormData();
 
-    this.mediaProvider.uploadMedia( formData).subscribe(response => {
+    this.mediaProvider.uploadMedia(formData).subscribe(response => {
 
       console.log('upload media response: ', response);
 
       // show spinner
-      this.loading.present().catch();
+      // this.loading.present().catch();
 
       this.setTimeOut();
 
       // if(response.message === "file uploaded"){
-        // this.navCtrl.pop();
-        console.log('file uploaded');
+      // this.navCtrl.pop();
+      console.log('file uploaded');
 
-       // this.uploadForm.reset();
-       // this.navCtrl.popTo(HomePage);
-      this.setAvatar(response);
-    //  }
+      // this.uploadForm.reset();
+      // this.navCtrl.popTo(HomePage);
+      if (this.tag === 'profile') {
+        this.setAvatar(response);
+      } else {
+        this.navCtrl.push(HomePage);
+      }
+      //  }
     });
 
   }
@@ -172,7 +170,6 @@ export class UploadPage {
 
   }
 
-
   private dataURItoBlob(dataURI) {
     let byteString;
     let mimeString;
@@ -191,38 +188,30 @@ export class UploadPage {
     for (let i = 0; i < byteString.length; i++) {
       ia[i] = byteString.charCodeAt(i);
     }
-    return new Blob([ia], {type:mimeString});
+    return new Blob([ia], { type: mimeString });
   }
-
-
 
   private setAvatar(response) {
-    if (this.tag === 'profile') {
-      this.profileImgID = response.file_id;
-      this.profileTag = {
-        'file_id': this.profileImgID,
-        'tag': this.tag,
-      };
-      this.setProfileTag(this.profileTag);
-    } else {
-      this.navCtrl.push(HomePage);
-    }
+    this.profileImgID = response.file_id;
+    this.profileTag = {
+      'file_id': this.profileImgID,
+      'tag': this.tag,
+    };
+    this.setProfileTag(this.profileTag);
   }
 
-
-  private setProfileTag(tag){
-    this.mediaProvider.setTag(tag).subscribe(res=>{
+  private setProfileTag(tag) {
+    this.mediaProvider.setTag(tag).subscribe(res => {
       console.log('set profile tag res: ', res);
-      this.navCtrl.push(ProfilePage);
     });
+    this.navCtrl.push(ProfilePage);
   }
-
 
   private cancelUpload() {
     console.log('reset form');
     this.uploadForm.reset();
-    this.filePath='';
-    this.isImage=false;
+    this.filePath = '';
+    this.isImage = false;
   }
 
   private loading = this.loadingCtrl.create({

@@ -12,7 +12,7 @@
 
   <ion-card>
     <!--<img [src]="filePath + ('profile' | getTags | async| thumbnail:'large' | async)"/>-->
-    <img *ngIf="avatarID != null" [src]="filePath + (avatarID| thumbnail:'large' | async)"/>
+    <img *ngIf="avatarID != undefined" [src]="filePath + (avatarID| thumbnail:'large' | async)"/>
 
     <ion-card-header>
       <ion-card-title>username: {{userAuth.user.username}}</ion-card-title>
@@ -92,7 +92,8 @@
       </div>
     </ion-list>
       <div text-center>
-        <button ion-button class="submit-btn" round block type="submit" [disabled]="!updateUserInfoForm.form.valid">Update</button>
+        <button ion-button class="submit-btn" round type="submit" color="secondary"
+                [disabled]="!updateUserInfoForm.form.valid">Update</button>
       </div>
     </form>
   </div>
@@ -103,7 +104,7 @@
   </div>
 
   <div  text-center>
-    <button ion-button round block color="danger" item-start="end" (click)="logout()">Logout</button>
+    <button ion-button round block color="danger" item-start="end" (click)="logout()">Log out</button>
   </div>
 
   <div  text-center>
