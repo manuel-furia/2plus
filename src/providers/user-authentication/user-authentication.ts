@@ -5,7 +5,7 @@ import { Response } from '../../interfaces/response';
 
 @Injectable()
 export class UserAuthenticationProvider {
-  user:User;
+  user:User={};
   public hasLoggedIn:Boolean = false;
 
   constructor(public http: HttpClient) {
@@ -41,10 +41,8 @@ export class UserAuthenticationProvider {
   }
 
   //check whether a user has logged in/not logged out
-
   checkToken() {
     const userUrl: string = "http://media.mw.metropolia.fi/wbma/users/user";
-
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -53,6 +51,5 @@ export class UserAuthenticationProvider {
     };
     return this.http.get<User>(userUrl, httpOptions);
   }
-
 
 }
