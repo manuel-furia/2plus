@@ -15,10 +15,37 @@
     </ion-item>
 
 
-    <pinch-zoom *ngIf="file.media_type==='image'">
+    <!--<pinch-zoom *ngIf="file.media_type==='image'">
       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
       <img [src]="uploadUrl + file.filename">
-    </pinch-zoom>
+    </pinch-zoom>-->
+
+
+    <ion-slides pager > <!--effect="flip"-->
+      <ion-slide > <!--*ngFor="let file of mediaArray"--> <!--use ngFor to show all media of the single item-->
+        <pinch-zoom *ngIf="file.media_type==='image'">
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+          <img [src]="uploadUrl + file.filename">
+        </pinch-zoom>
+      </ion-slide>
+
+      <!-- to test slide gallery, to be removed after code is ready-->
+      <ion-slide>
+        <pinch-zoom *ngIf="file.media_type==='image'">
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+          <img [src]="uploadUrl + file.filename">
+        </pinch-zoom>
+      </ion-slide>
+      <ion-slide>
+        <pinch-zoom *ngIf="file.media_type==='image'">
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+          <img [src]="uploadUrl + file.filename">
+        </pinch-zoom>
+      </ion-slide>
+      <!--end: to be removed-->
+
+
+    </ion-slides>
 
     <video *ngIf="file.media_type==='video'" width="320" height="240" controls>
       <source [src]="uploadUrl + file.filename" type="video/mp4">

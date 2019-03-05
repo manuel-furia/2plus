@@ -14,6 +14,7 @@ export class SingleItemPage {
   public file:Media;
   public file_id;
   public username;
+  public mediaArray;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -51,6 +52,8 @@ export class SingleItemPage {
     })
   }
 
-
+  slideOpts = {
+    effect: 'flip'
+  };
 
 }
