@@ -1,3 +1,41 @@
 page-single-item {
 
+  .field{
+    color: #488aff !important;
+    padding-right: 10px;
+  }
+
+  .content{
+    font-weight: normal;
+    color: black;
+  }
+
+  .contact{
+    .field{
+      color: #32db64 !important;
+      font-size: large;
+    }
+    .content{
+      color: white;
+      background-color: #488aff;
+      padding: 10px !important;
+      border-radius: 10px;
+      font-size: large;
+    }
+  }
+
+  .price{
+    .content{
+      color: #f14100 !important;
+      font-weight: bold !important;
+      font-size: x-large !important;
+    }
+    .field{
+      color: #222222 !important;
+      font-weight: normal !important;
+      font-size: small !important;
+      padding-left: 5px;
+    }
+  }
+
 }
