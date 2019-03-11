@@ -18,7 +18,6 @@ import { ProfilePage } from '../profile/profile';
   templateUrl: 'upload.html',
 })
 
-
 export class UploadPage {
 
   file: any;
@@ -26,13 +25,13 @@ export class UploadPage {
   title = '';
   description = '';
   public myBlob: Blob;
-  public isImage:Boolean = false;
-  public hasFile:Boolean = false;
+  public isImage: Boolean = false;
+  public hasFile: Boolean = false;
   @ViewChild('uploadForm') uploadForm: any;
 
-  profileTag:{};
-  tag:string = '';
-  profileImgID:number;
+  profileTag: {};
+  tag: string = '';
+  profileImgID: number;
 
   filters = {
     brightness: 100,
@@ -41,13 +40,13 @@ export class UploadPage {
     saturation: 100,
   };
 
+  constructor(
+    private camera: Camera,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public loadingCtrl: LoadingController,
+    public mediaProvider: MediaProvider) {
 
-  constructor(private chooser:Chooser,
-              private camera:Camera,
-              public navCtrl: NavController,
-              public navParams: NavParams,
-              public loadingCtrl: LoadingController,
-              public mediaProvider: MediaProvider) {
     this.tag = this.navParams.get('tag');
     console.log('getting tag passed from profile page: ', this.tag);
   }
@@ -56,75 +55,58 @@ export class UploadPage {
     console.log('ionViewDidLoad UploadPage');
   }
 
+  handleChange($event) {
+    // console.log($event.target.files);
+    // get the file from $event
+    this.file = $event.target.files[0];
 
+    if (this.file != null) {
+      this.hasFile = true;
+    }
 
-
-  private chooseFile(){
-    this.chooser.getFile("image/*, video/!*, audio/!*")
-    .then(file => {
-      if(file){
-        console.log(file ? file.name : 'canceled');
-       // console.log(file.dataURI);
-        console.log(file.mediaType);
-        //console.log(file.uri);
-        this.hasFile = true;
-        this.showPreview(file);
-
-      }else {
-        alert("please choose a file to upload");
-      }
-    })
-    .catch((error: any) => console.error(error));
-
+// call showPreview
+    this.showPreview();
+    if (this.file.type.includes('image')) {
+      this.isImage = true;
+    }
   }
 
-  private showPreview(file) {
-
-    this.file = new Blob(
-      [file.data], {
-        type: file.mediaType
-      });
-
+  showPreview() {
+    // show selected image in img
     const reader = new FileReader();
-    reader.addEventListener("loadend", function() {
-      // reader.result contains the contents of blob as a typed array
-      reader.result;
-    });
-    reader.readAsArrayBuffer(this.file);
-   // console.log('myfile: ', this.file);
+    reader.onloadend = (evt) => {
+      // console.log(reader.result);
+      this.filePath = reader.result;
+    };
 
-    if (file.mediaType.includes('video')) {
+    if (this.file.type.includes('video')) {
       this.filePath = 'http://via.placeholder.com/500X200/000?text=Video';
-    } else if (file.mediaType.includes('audio')) {
+    } else if (this.file.type.includes('audio')) {
       this.filePath = 'http://via.placeholder.com/500X200/000?text=Audio';
     } else {
-      this.filePath = file.dataURI;
-      // if(file.mediaType.includes('image')){}
-      this.isImage = true;
+      reader.readAsDataURL(this.file);
     }
 
   }
 
-  private uploadMedia(){
+  private uploadMedia() {
     const formData = this.getFormData();
 
-    this.mediaProvider.uploadMedia( formData).subscribe(response => {
+    this.mediaProvider.uploadMedia(formData).subscribe(response => {
 
       console.log('upload media response: ', response);
 
       // show spinner
-      this.loading.present().catch();
+      //this.loading.present().catch();
+      // this.setTimeOut();
 
-      this.setTimeOut();
+      if (response.message === 'File uploaded') {
 
-      // if(response.message === "file uploaded"){
-        // this.navCtrl.pop();
         console.log('file uploaded');
 
-       // this.uploadForm.reset();
-       // this.navCtrl.popTo(HomePage);
-      this.setAvatar(response);
-    //  }
+        this.uploadForm.reset();
+        this.setAvatar(response);
+      }
     });
 
   }
@@ -142,7 +124,6 @@ export class UploadPage {
 
     //formData.append('filter', filters);
 
-    //formData.append('file', this.file);
     formData.append('file', this.file);
     // console.log('form data append file: ', this.file);
     return formData;
@@ -172,7 +153,6 @@ export class UploadPage {
 
   }
 
-
   private dataURItoBlob(dataURI) {
     let byteString;
     let mimeString;
@@ -191,10 +171,8 @@ export class UploadPage {
     for (let i = 0; i < byteString.length; i++) {
       ia[i] = byteString.charCodeAt(i);
     }
-    return new Blob([ia], {type:mimeString});
+    return new Blob([ia], { type: mimeString });
   }
-
-
 
   private setAvatar(response) {
     if (this.tag === 'profile') {
@@ -209,20 +187,18 @@ export class UploadPage {
     }
   }
 
-
-  private setProfileTag(tag){
-    this.mediaProvider.setTag(tag).subscribe(res=>{
+  private setProfileTag(tag) {
+    this.mediaProvider.setTag(tag).subscribe(res => {
       console.log('set profile tag res: ', res);
       this.navCtrl.push(ProfilePage);
     });
   }
 
-
   private cancelUpload() {
     console.log('reset form');
     this.uploadForm.reset();
-    this.filePath='';
-    this.isImage=false;
+    this.filePath = '';
+    this.isImage = false;
   }
 
   private loading = this.loadingCtrl.create({
