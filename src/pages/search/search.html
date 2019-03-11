@@ -7,8 +7,9 @@
 <ion-content padding>
   <form *ngIf="showSearchForm" (ngSubmit)="search()" name="searchForm" #searchForm="ngForm" id="searchForm">
 
-    <ion-title text-center style="color: #488aff; font-size: large; font-weight: bolder">Filter</ion-title>
+    <ion-title text-center style="color: #488aff; font-size: large; font-weight: bolder">Search Options</ion-title>
 
+    <div class="form-group">
     <ion-row>
       <ion-item>
         <ion-label style="color: blue; font-size: large">Keyword</ion-label>
@@ -17,10 +18,15 @@
                    type="text"
                    name="searchTerm"
                    id="searchTerm"
+                   #keyword="ngModel"
                    [(ngModel)]="searchTerm">
         </ion-input>
       </ion-item>
     </ion-row>
+      <div class="form-control-feedback"  *ngIf="keyword.errors && (keyword.dirty || keyword.touched)">
+        <p *ngIf="keyword.errors" style="color: #f53d3d">Please enter a keyword</p>
+      </div>
+    </div>
 
     <ion-row>
       <ion-item>
@@ -84,7 +90,7 @@
       </ion-thumbnail>
 
       <h2>{{media.title}}</h2>
-      <p>{{media.time_added | date: ('dd.MM.yy')}}</p>  <!--MM: month mm: minuit-->
+      <p>{{media.time_added | date: ('dd.MM.yy')}}</p>
       <p>{{media.description}}</p>
 
       <button ion-button round  (click)="viewSingleMedia(media.file_id)">View</button>
