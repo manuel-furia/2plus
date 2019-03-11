@@ -1,4 +1,3 @@
-
 <ion-header>
 
   <ion-navbar>
@@ -9,26 +8,84 @@
 
 
 <ion-content padding>
-  <form  #uploadForm="ngForm" (ngSubmit)="uploadMedia()">
+  <form #uploadForm="ngForm" (ngSubmit)="uploadMedia()">
+
+    <ion-row justify-content-center>
+      <ion-input type="file"
+                 accept="image/*, video/*, audio/*"
+                 placeholder="choose a media file to upload"
+                 style="font-size: large; color: white; max-width: 130px; margin-right: 30px"
+                 (change)="handleChange($event)"
+      ></ion-input>
+
+          <button type="button"
+                  ion-button
+                  round
+                  (click)="useCamera()">Use Camera
+          </button>
+    </ion-row>
+
+    <div text-center>
     <div class="form-group">
-      <ion-label stacked>title</ion-label>
-      <ion-input type="text"
-                 placeholder="3-20 characters"
-                 [(ngModel)]="title"
-                 name="title"
-                 required
-                 #fileTitle="ngModel"
-                 maxlength="20"
-                 minlength="3">
+      <ion-label stacked style="color: blue; font-size: large">Title</ion-label>
+      <ion-input
+        text-center
+        type="text"
+        placeholder="3-20 characters"
+        [(ngModel)]="title"
+        name="title"
+        required
+        #fileTitle="ngModel"
+        maxlength="20"
+        minlength="3">
       </ion-input>
-      <div class="form-control-feedback"  *ngIf="fileTitle.errors && (fileTitle.dirty || fileTitle.touched)">
-        <p *ngIf="fileTitle.errors" style="color: #f53d3d">title needs to be 3-20 characters</p>
+      <div class="form-control-feedback" *ngIf="fileTitle.errors && (fileTitle.dirty || fileTitle.touched)">
+        <p *ngIf="fileTitle.errors" style="color: #f53d3d">Title needs to be 3 - 20 characters</p>
       </div>
     </div>
 
+
+      <!--UI for price and location-->
+
+   <!-- <div class="form-group"> &lt;!&ndash;[(ngModel)]="" to be defined based on description interface&ndash;&gt;
+      <ion-label stacked style="color: blue; font-size: large">Price</ion-label>
+      <ion-input
+        type="number"
+        text-center
+        placeholder="Enter a price"
+        [(ngModel)]="title"
+        name="price"
+        required
+        #itemPrice="ngModel">
+      </ion-input>
+      <div class="form-control-feedback" *ngIf="itemPrice.errors && (itemPrice.dirty || itemPrice.touched)">
+        <p *ngIf="itemPrice.errors" style="color: #f53d3d">Price is required</p>
+      </div>
+    </div>-->
+
+
+    <!--<div class="form-group"> &lt;!&ndash;[(ngModel)]="" to be defined based on description interface&ndash;&gt;
+      <ion-label stacked style="color: blue; font-size: large">Location</ion-label>
+      <ion-input
+        text-center
+        type="text"
+        placeholder="Enter a location"
+        [(ngModel)]="title"
+        name="location"
+        required
+        #itemLocation="ngModel">
+      </ion-input>
+      <div class="form-control-feedback" *ngIf="itemLocation.errors && (itemLocation.dirty || itemLocation.touched)">
+        <p *ngIf="itemLocation.errors" style="color: #f53d3d">Location is required</p>
+      </div>
+    </div>-->
+
+
+
     <div class="form-group">
-      <ion-label stacked>description</ion-label>
+      <ion-label stacked style="color: blue; font-size: large">Description</ion-label>
       <ion-textarea type="text"
+                    text-center
                     [(ngModel)]="description"
                     placeholder="10-100 characters"
                     name="description"
@@ -36,45 +93,33 @@
                     #fileDescription="ngModel"
                     minlength="10"
                     maxlength="100"></ion-textarea>
-      <div class="form-control-feedback"  *ngIf="fileDescription.errors && (fileDescription.dirty || fileDescription.touched)">
-        <p *ngIf="fileDescription.errors" style="color: #f53d3d">description length needs to be 10-100 characters</p>
+      <div class="form-control-feedback"
+           *ngIf="fileDescription.errors && (fileDescription.dirty || fileDescription.touched)">
+        <p *ngIf="fileDescription.errors" style="color: #f53d3d">Description length needs to be 10 - 100 characters</p>
       </div>
     </div>
+    </div>
 
-    <!--use plugin chooser-->
-    <ion-row justify-content-center>
-    <button ion-button
-            type="button"
-            round
-            color="primary"
-            (click)="chooseFile()">Choose file</button>
-    </ion-row>
-    <ion-row justify-content-center>
-    <button ion-button
-            type="button"
-            round
-            color="primary"
-            (click)="useCamera()">Use camera</button>
-    </ion-row>
 
     <ion-row justify-content-center>
       <button ion-button
               type="submit"
               round
               color="secondary"
-              [disabled]="!uploadForm.form.valid || !hasFile">Upload</button >
+              [disabled]="!uploadForm.form.valid || !hasFile">Upload
+      </button>
     </ion-row>
 
     <ion-row justify-content-center>
-    <button ion-button
-            type="button"
-            round
-            color="danger"
-            (click)="cancelUpload()">Cancel</button>
+      <button ion-button
+              type="button"
+              round
+              color="danger"
+              (click)="cancelUpload()">Cancel
+      </button>
     </ion-row>
 
   </form>
-
 
 
   <ion-card *ngIf="filePath">
@@ -84,7 +129,7 @@
          'brightness('+filters.brightness/100+') ' +
           'contrast('+filters.contrast/100+') ' +
            'saturate('+filters.saturation/100+') ' +
-            'sepia('+filters.warmth/100+')'}" >
+            'sepia('+filters.warmth/100+')'}">
 
     <div *ngIf="isImage">
       <ion-item>

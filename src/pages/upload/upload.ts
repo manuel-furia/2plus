@@ -7,7 +7,6 @@ import {
 } from 'ionic-angular';
 import { MediaProvider } from '../../providers/media/media';
 import { HomePage } from '../home/home';
-import { Chooser } from '@ionic-native/chooser';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { stringify, unescape } from 'querystring';
 import { ProfilePage } from '../profile/profile';
@@ -41,7 +40,6 @@ export class UploadPage {
   };
 
   constructor(
-    private chooser: Chooser,
     private camera: Camera,
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -55,46 +53,36 @@ export class UploadPage {
     console.log('ionViewDidLoad UploadPage');
   }
 
-  private chooseFile() {
-    this.chooser.getFile('image/*, video/!*, audio/!*').then(file => {
-      if (file) {
-        console.log(file ? file.name : 'canceled');
-        // console.log(file.dataURI);
-        console.log(file.mediaType);
-        //console.log(file.uri);
-        this.hasFile = true;
-        this.showPreview(file);
+  handleChange($event) {
+    // console.log($event.target.files);
+    // get the file from $event
+    this.file = $event.target.files[0];
 
-      } else {
-        alert('please choose a file to upload');
-      }
-    }).catch((error: any) => console.error(error));
+    if (this.file != null) {
+      this.hasFile = true;
+    }
 
+// call showPreview
+    this.showPreview();
+    if (this.file.type.includes('image')) {
+      this.isImage = true;
+    }
   }
 
-  private showPreview(file) {
-
-    this.file = new Blob(
-      [file.data], {
-        type: file.mediaType,
-      });
-
+  showPreview() {
+    // show selected image in img
     const reader = new FileReader();
-    reader.addEventListener('loadend', function() {
-      // reader.result contains the contents of blob as a typed array
-      reader.result;
-    });
-    reader.readAsArrayBuffer(this.file);
-    // console.log('myfile: ', this.file);
+    reader.onloadend = (evt) => {
+      // console.log(reader.result);
+      this.filePath = reader.result;
+    };
 
-    if (file.mediaType.includes('video')) {
+    if (this.file.type.includes('video')) {
       this.filePath = 'http://via.placeholder.com/500X200/000?text=Video';
-    } else if (file.mediaType.includes('audio')) {
+    } else if (this.file.type.includes('audio')) {
       this.filePath = 'http://via.placeholder.com/500X200/000?text=Audio';
     } else {
-      this.filePath = file.dataURI;
-      // if(file.mediaType.includes('image')){}
-      this.isImage = true;
+      reader.readAsDataURL(this.file);
     }
 
   }
@@ -107,22 +95,12 @@ export class UploadPage {
       console.log('upload media response: ', response);
 
       // show spinner
-      // this.loading.present().catch();
+      if (response.message === 'File uploaded') {
+        console.log('file uploaded');
 
-      this.setTimeOut();
-
-      // if(response.message === "file uploaded"){
-      // this.navCtrl.pop();
-      console.log('file uploaded');
-
-      // this.uploadForm.reset();
-      // this.navCtrl.popTo(HomePage);
-      if (this.tag === 'profile') {
+        this.uploadForm.reset();
         this.setAvatar(response);
-      } else {
-        this.navCtrl.push(HomePage);
       }
-      //  }
     });
 
   }
@@ -140,7 +118,6 @@ export class UploadPage {
 
     //formData.append('filter', filters);
 
-    //formData.append('file', this.file);
     formData.append('file', this.file);
     // console.log('form data append file: ', this.file);
     return formData;
