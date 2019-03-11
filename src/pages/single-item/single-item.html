@@ -1,38 +1,48 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>single-item</ion-title>
+    <ion-title>Single-Item</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <ion-card *ngIf="file">
-    <ion-item>
-      <h1> {{file.title}} </h1>
-      <h3>user: {{username}}</h3>
-      <h3 *ngIf="file.description !==null">description: {{file.description}}</h3>
-      <h3>publish date: {{file.time_added | date: ('dd.MM.yy')}}</h3>
-
-    </ion-item>
-
-
-    <pinch-zoom *ngIf="file.media_type==='image'">
+       <pinch-zoom *ngIf="file.media_type==='image'">
       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
       <img [src]="uploadUrl + file.filename">
     </pinch-zoom>
 
     <video *ngIf="file.media_type==='video'" width="320" height="240" controls>
       <source [src]="uploadUrl + file.filename" type="video/mp4">
-      <!--<source [src]="uploadUrl + file.filename" type="video/ogg">-->
       Your browser does not support the video tag.
     </video>
 
     <audio controls *ngIf="file.media_type==='audio'">
       <source [src]="uploadUrl + file.filename" type="audio/ogg">
-      <!--<source src="horse.mp3" type="audio/mpeg">-->
       Your browser does not support the audio tag.
     </audio>
 
-    <!--<img src="#image" [src]= "uploadUrl + " [alt]="pic.title" >-->
+    <h1>{{file.title}}</h1>
+    <ion-list>
+    <ion-item>
+          <span class="field"><ion-icon name="person"></ion-icon> </span><span class="content">{{username}}</span>
+    </ion-item>
+
+      <ion-item>
+        <span class="field"><ion-icon name="pin"></ion-icon> </span><span class="content">Matinkyla 4 Espoo</span>
+      </ion-item>
+
+      <ion-item>
+      <ion-row>
+        <ion-col><span class="field"><ion-icon name="calendar"></ion-icon></span> <span class="content">{{file.time_added | date: ('dd.MM.yy')}}</span></ion-col>
+        <ion-col class="price"><span class="content">2000</span><span class="field"><ion-icon name="logo-euro"></ion-icon></span></ion-col>
+      </ion-row>
+      </ion-item>
+      <ion-item class="contact">
+        <span class="field"><ion-icon name="phone-portrait"></ion-icon></span><span class="content">5647890654321</span>
+      </ion-item>
+
+        <p *ngIf="file.description !==null"><span class="field">Description:</span> {{file.description}}</p>
+    </ion-list>
 
   </ion-card>
 </ion-content>
