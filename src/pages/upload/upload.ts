@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { Platform } from 'ionic-angular';
 import {
   IonicPage,
   LoadingController,
@@ -24,7 +25,6 @@ export class UploadPage {
   filePath = '';
   title = '';
   description = '';
-  public myBlob: Blob;
   public isImage: Boolean = false;
   public hasFile: Boolean = false;
   @ViewChild('uploadForm') uploadForm: any;
@@ -44,6 +44,7 @@ export class UploadPage {
     private camera: Camera,
     public navCtrl: NavController,
     public navParams: NavParams,
+    public platform:Platform,
     public loadingCtrl: LoadingController,
     public mediaProvider: MediaProvider) {
 
@@ -53,6 +54,9 @@ export class UploadPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad UploadPage');
+    console.log('platform cordova: ', this.platform.is("cordova"));
+    console.log('platform: ', this.platform)
+
   }
 
   handleChange($event) {
