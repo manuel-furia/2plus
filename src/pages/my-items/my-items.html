@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>MyItems</ion-title>
+    <ion-title> <img class="logoImg" src="../../assets/imgs/logo.png"> My Items</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -12,8 +12,8 @@
         <img [src]= "uploadUrl + (media.file_id | thumbnail:'default' | async)" [alt]="media.title" >
       </ion-thumbnail>
 
-      <h2>{{media.title}}</h2>
-      <p>{{media.time_added | date: ('dd.MM.yy')}}</p>  <!--MM: month mm: minuit-->
+      <h2 class="title">{{media.title}}</h2>
+      <h3 class="publishDate"> {{media.time_added | date: ('dd.MM.yy')}}</h3>  <!--MM: month mm: minuit-->
       <p>{{media.description}}</p>
 
       <button ion-button   (click)="viewSingleMedia(media.file_id)">View</button>

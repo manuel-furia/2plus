@@ -20,5 +20,51 @@ $colors: (
   secondary:  #32db64,
   danger:     #f53d3d,
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #222,
+  base: #55acee,
+  contrast: #ffffff
 );
+
+.logoImg{
+  height: 30px;
+  width: auto;
+  position: absolute;
+  left: 15px;
+}
+
+button{
+  width: 200px;
+}
+
+ion-label{
+  color: #488aff;
+  font-size: large !important;
+}
+
+img{
+  max-height: fit-content;
+  max-width: 400px;
+}
+
+
+@media (min-width: 820px) {
+  ion-content {
+    width:  80%;
+    margin-left: 10%;
+    justify-content: center;
+    text-align: center;
+    background-color: #ebebeb !important;
+  }
+
+  ion-thumbnail{
+    img{
+      width: fit-content !important;
+      height: 500px !important;
+    }
+  }
+
+  /*::-webkit-scrollbar,
+  *::-webkit-scrollbar {
+    visibility: hidden;
+  }*/
+}
