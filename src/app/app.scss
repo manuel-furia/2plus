@@ -1,70 +1,86 @@
-// http://ionicframework.com/docs/theming/
-
-
-// App Global Sass
-// --------------------------------------------------
-// Put style rules here that you want to apply globally. These
-// styles are for the entire app and not just one component.
-// Additionally, this file can be also used as an entry point
-// to import other Sass files to be included in the output CSS.
-//
-// Shared Sass variables, which can be used to adjust Ionic's
-// default Sass variables, belong in "theme/variables.scss".
-//
-// To declare rules for a specific mode, create a child rule
-// for the .md, .ios, or .wp mode classes. The mode class is
-// automatically applied to the <body> element in the app.
-
 $colors: (
-  primary:    #488aff,
-  secondary:  #32db64,
-  danger:     #f53d3d,
-  light:      #f4f4f4,
-  dark:       #222,
+  primary: #488aff,
+  secondary: #32db64,
+  danger: #f53d3d,
+  light: #f4f4f4,
+  dark: #222,
   base: #55acee,
   contrast: #ffffff
 );
 
-.logoImg{
+ion-content {
+  justify-content: center;
+  text-align: center;
+  background-color: #ebebeb !important;
+}
+
+.logoImg {
   height: 30px;
   width: auto;
-  position: absolute;
+  position: fixed;
   left: 15px;
 }
 
-button{
+button {
   width: 200px;
 }
 
-ion-label{
+ion-label {
   color: #488aff;
   font-size: large !important;
 }
 
-img{
-  max-height: fit-content;
-  max-width: 400px;
+
+@media (min-width: 1025px) {
+
+  ion-content {
+    ion-list{
+      width: 80%;
+      padding-left: 20%;
+      ion-item{
+        ion-thumbnail {
+          img {
+            width: 200px !important;
+            height: 200px !important;
+          }
+        }
+      }
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+      width: 12px;
+
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: #ebebeb;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #b9b9b9;
+    }
+
+  }
 }
 
 
-@media (min-width: 820px) {
-  ion-content {
-    width:  80%;
-    margin-left: 10%;
-    justify-content: center;
-    text-align: center;
-    background-color: #ebebeb !important;
+@media (max-width: 600px) {
+  .header-nav {
+    visibility: hidden;
+  }
+}
+
+@media (max-width: 350px) {
+  .header-nav {
+    visibility: hidden;
   }
 
-  ion-thumbnail{
-    img{
-      width: fit-content !important;
-      height: 500px !important;
+  ion-header {
+    ion-title {
+      visibility: hidden;
     }
   }
-
-  /*::-webkit-scrollbar,
-  *::-webkit-scrollbar {
-    visibility: hidden;
-  }*/
 }
