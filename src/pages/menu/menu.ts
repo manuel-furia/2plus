@@ -6,7 +6,8 @@ import { SearchPage } from '../search/search';
 import { MyItemsPage } from '../my-items/my-items';
 import { LoginRegisterPage } from '../login-register/login-register';
 import { ProfilePage } from '../profile/profile';
-import { UserAuthenticationProvider } from '../../providers/user-authentication/user-authentication';
+import { LoginProvider } from '../../providers/login/login';
+import { StorageProvider } from "../../providers/storage/storage";
 
 /**
  * Generated class for the MenuPage page.
@@ -23,12 +24,8 @@ import { UserAuthenticationProvider } from '../../providers/user-authentication/
 export class MenuPage {
 
   constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              public userAuth:UserAuthenticationProvider) {
-  }
-
-  ionViewDidLoad() {
-    //console.log('ionViewDidLoad MenuPage');
+              public storage: StorageProvider,
+              public userAuth: LoginProvider) {
   }
 
   goToHomePage() {
@@ -61,10 +58,7 @@ export class MenuPage {
   }
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.clear();
-    this.userAuth.hasLoggedIn = false;
+    this.storage.deleteSession();
     this.navCtrl.parent.select(0);
-    //this.navCtrl.push(LoginRegisterPage);
   }
 }

@@ -1,12 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { MediaProvider } from '../../providers/media/media';
-import { UserAuthenticationProvider } from '../../providers/user-authentication/user-authentication';
 import { MyItemsPage } from '../my-items/my-items';
 import { UploadPage } from '../upload/upload';
-import { SingleItemPage } from '../single-item/single-item';
 import { Media } from '../../interfaces/media';
 import { User } from '../../interfaces/user';
+import { LoginProvider } from "../../providers/login/login";
+import { StorageProvider } from "../../providers/storage/storage";
 
 @IonicPage()
 @Component({
@@ -18,8 +18,9 @@ export class ProfilePage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    public userAuth: UserAuthenticationProvider,
-    public mediaProvider: MediaProvider) {
+    public userAuth: LoginProvider,
+    public mediaProvider: MediaProvider,
+    public storage: StorageProvider) {
   }
 
   public filePath = 'http://media.mw.metropolia.fi/wbma/uploads/';
@@ -46,12 +47,12 @@ export class ProfilePage {
         this.avatarID = undefined;
       } else{
         files.forEach(file=>{
-          if(file.user_id == this.userAuth.user.user_id){
+          if(file.user_id == this.storage.loadSessionUser().user_id){
             this.profileImages.push(file);
           }
         });
           console.log('after compare', this.profileImages.length);
-          console.log('this user_id: ', this.userAuth.user.user_id);
+          console.log('this user_id: ', this.storage.loadSessionUser().user_id);
           console.log('my profile imgs?: ', this.profileImages);
 
 
@@ -74,8 +75,7 @@ export class ProfilePage {
   }
 
   logout() {
-    localStorage.clear();
-    this.userAuth.hasLoggedIn = false;
+    this.storage.deleteSession();
     this.navCtrl.parent.select(0);
   }
 
@@ -84,7 +84,7 @@ export class ProfilePage {
   }
 
   deleteAccount() {
-    this.mediaProvider.deleteUser(this.userAuth.user.user_id).subscribe(res => {
+    this.mediaProvider.deleteUser(this.storage.loadSessionUser().user_id).subscribe(res => {
       this.mediaProvider.presentToast(res.message);
       localStorage.clear();
     });
@@ -92,18 +92,18 @@ export class ProfilePage {
 
   updateUserInfo() {
     let newData={};
-
+    const user = this.storage.loadSessionUser();
     if(this.user.username != null){
        newData["username"]= this.user.username;
-      this.userAuth.user.username = this.user.username;
+       user.username = this.user.username;
     }
     if(this.user.email != undefined){
       newData['email']=this.user.email;
-      this.userAuth.user.email = this.user.email;
+      user.email = this.user.email;
     }
     if(this.user.password != undefined){
       newData['password']= this.user.password;
-      this.userAuth.user.password = this.user.password;
+      user.password = this.user.password;
     }
 
     console.log('new user data: ', newData);
