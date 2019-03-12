@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Single-Item</ion-title>
+    <ion-title> <img class="logoImg" src="../../assets/imgs/logo.png"> Single-Item</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -8,7 +8,7 @@
   <ion-card *ngIf="file">
        <pinch-zoom *ngIf="file.media_type==='image'">
       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-      <img [src]="uploadUrl + file.filename">
+      <img class="singleItemImg" [src]="uploadUrl + file.filename">
     </pinch-zoom>
 
     <video *ngIf="file.media_type==='video'" width="320" height="240" controls>
@@ -21,7 +21,7 @@
       Your browser does not support the audio tag.
     </audio>
 
-    <h1>{{file.title}}</h1>
+    <ion-card-title text-center>{{file.title}}</ion-card-title>
     <ion-list>
     <ion-item>
           <span class="field"><ion-icon name="person"></ion-icon> </span><span class="content">{{username}}</span>

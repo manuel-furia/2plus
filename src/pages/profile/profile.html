@@ -1,45 +1,41 @@
-
 <ion-header>
-
   <ion-navbar>
-    <ion-title>profile</ion-title>
+    <ion-title><img class="logoImg" src="../../assets/imgs/logo.png"> Profile</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 
-<ion-content class="card-background-page">
+<ion-content padding>
 
   <ion-card>
-    <!--<img [src]="filePath + ('profile' | getTags | async| thumbnail:'large' | async)"/>-->
-    <img *ngIf="avatarID != null" [src]="filePath + (avatarID| thumbnail:'large' | async)"/>
+    <pinch-zoom *ngIf="avatarID != null && avatarID != 'undefined'" >
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+      <img *ngIf="avatarID != null && avatarID != 'undefined'" [src]="filePath + (avatarID | thumbnail:'large' | async)"/>
+    </pinch-zoom>
 
-    <div class="card-title">
-      username: {{userAuth.user.username}}
-    </div>
-    <div class="card-subtitle" *ngIf="userAuth.user.full_name">
-     full name: {{ userAuth.user.full_name}}
-    </div>
-    <div class="card-subtitle">
-      email: {{userAuth.user.email}}
-    </div>
-
+    <ion-card-content>
+        <ion-item text-center> <span class="field">Username:</span> <span class="content">{{userAuth.user.username}}</span> </ion-item>
+        <ion-item *ngIf="userAuth.user.full_name"><span class="field">Full name: </span><span class="content">{{ userAuth.user.full_name}}</span>  </ion-item>
+        <ion-item text-center><span class="field">Email:</span> <span class="content">{{userAuth.user.email}}</span> </ion-item>
+    </ion-card-content>
   </ion-card>
 
-  <div  text-center>
-    <button ion-button round (click)="setAvatar()"> Update Avatar </button>
-  </div>
+  <ion-list>
+    <ion-row justify-content-center>
+      <button ion-button round (click)="setAvatar()"> Update Avatar</button>
+    </ion-row>
+    <ion-row justify-content-center>
+      <button ion-button round
+              (click)="goToMyItemsPage()" color="primary"> Manage My Items
+      </button>
+    </ion-row>
+    <ion-row justify-content-center>
+      <button ion-button round color="danger" item-start="end" (click)="logout()">Log Out</button>
+    </ion-row>
+    <ion-row justify-content-center>
+      <button ion-button round color="danger" item-start="end" (click)="deleteAccount()">Delete Account</button>
+    </ion-row>
+    <ion-row justify-content-center></ion-row>
+  </ion-list>
 
-  <div  text-center>
-    <button ion-button round
-            (click)="goToMyItemsPage()" color="primary"> Manage My Items </button>
-  </div>
-
-  <div  text-center>
-    <button ion-button round color="danger" item-start="end" (click)="logout()">Logout</button>
-  </div>
-
-  <div  text-center>
-    <button ion-button round color="danger" item-start="end" (click)="deleteAccount()">Delete Account</button>
-  </div>
 </ion-content>
