@@ -35,5 +35,9 @@ export class StorageProvider {
       return null;
   }
 
+  public sessionPresent(): boolean {
+    return this.loadSessionUser() !== null;
+  }
+
 
 }
