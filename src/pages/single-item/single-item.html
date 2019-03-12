@@ -1,36 +1,16 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Single-Item</ion-title>
+    <ion-title> <img class="logoImg" src="../../assets/imgs/logo.png"> Single-Item</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <ion-card *ngIf="file">
 
-    <ion-slides pager > <!--effect="flip"-->
-      <ion-slide > <!--*ngFor="let file of mediaArray"--> <!--use ngFor to show all media of the single item-->
-        <pinch-zoom *ngIf="file.media_type==='image'">
-          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-          <img [src]="uploadUrl + file.filename">
-        </pinch-zoom>
-      </ion-slide>
-
-      <!-- to test slide gallery, to be removed after code is ready-->
-      <ion-slide>
-        <pinch-zoom *ngIf="file.media_type==='image'">
-          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-          <img [src]="uploadUrl + file.filename">
-        </pinch-zoom>
-      </ion-slide>
-      <ion-slide>
-        <pinch-zoom *ngIf="file.media_type==='image'">
-          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-          <img [src]="uploadUrl + file.filename">
-        </pinch-zoom>
-      </ion-slide>
-
-
-    </ion-slides>
+    <pinch-zoom *ngIf="file.media_type==='image'">
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+      <img class="singleItemImg" [src]="uploadUrl + file.filename">
+    </pinch-zoom>
 
     <video *ngIf="file.media_type==='video'" width="320" height="240" controls>
       <source [src]="uploadUrl + file.filename" type="video/mp4">
@@ -42,7 +22,7 @@
       Your browser does not support the audio tag.
     </audio>
 
-    <h1>{{file.title}}</h1>
+    <ion-card-title text-center>{{file.title}}</ion-card-title>
     <ion-list>
     <ion-item>
           <span class="field"><ion-icon name="person"></ion-icon> </span><span class="content">{{username}}</span>

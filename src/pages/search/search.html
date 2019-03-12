@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Search</ion-title>
+    <ion-title><img class="logoImg" src="../../assets/imgs/logo.png"> Search</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -13,7 +13,7 @@
     <ion-row>
       <ion-item>
         <ion-label style="color: blue; font-size: large">Keyword</ion-label>
-        <ion-input placeholder="search term"
+        <ion-input placeholder="Keyword is required"
                    required
                    type="text"
                    name="searchTerm"
@@ -54,7 +54,7 @@
       <ion-item>
         <ion-label style="color: blue; font-size: large">Location</ion-label>
         <ion-input type="text"
-                   placeholder="enter a location"
+                   placeholder="Enter a location"
                    name="location"
                    id="location"
                    [(ngModel)]="location">
