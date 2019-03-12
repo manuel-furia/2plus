@@ -6,7 +6,6 @@ import { StoredSession } from "../../interfaces/storedSession";
 
 @Injectable()
 export class StorageProvider {
-  user:User;
 
   constructor() {
   }
