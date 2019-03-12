@@ -2,8 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MediaProvider } from '../../providers/media/media';
 import { ProfilePage } from '../../pages/profile/profile';
-import { UserAuthenticationProvider } from '../../providers/user-authentication/user-authentication';
 import { Media } from '../../interfaces/media';
+import { StorageProvider } from "../../providers/storage/storage";
 
 @Pipe({
   name: 'getTags',
@@ -12,8 +12,7 @@ export class GetTagsPipe implements PipeTransform {
 
   constructor(public http: HttpClient,
               public mediaProvider:MediaProvider,
-              public profilePage:ProfilePage,
-              public userAuth:UserAuthenticationProvider
+              public userStorage:StorageProvider
   ) {  }
 
   async transform(tag: string) {
@@ -23,12 +22,12 @@ export class GetTagsPipe implements PipeTransform {
 
         let profileFound:Boolean = false;
         files.forEach((file: Media) => {
-          if (file.user_id === this.userAuth.user.user_id) {
+          if (file.user_id === this.userStorage.loadSessionUser().user_id) {
             profileFound = true;
             resolve(file.file_id);
           }
           else {
-            console.log("profile not found: " + file.user_id + '/' + this.userAuth.user.user_id);
+            console.log("profile not found: " + file.user_id + '/' + this.userStorage.loadSessionUser().user_id);
             //reject('No profile image added.');
           }
         });

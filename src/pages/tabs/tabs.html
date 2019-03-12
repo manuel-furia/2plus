@@ -9,9 +9,9 @@
   <ion-tabs>
     <ion-tab tabIcon="home" tabTitle="Home" [root]="HomePage"></ion-tab>
 
-    <ion-tab [show]="userAuth.hasLoggedIn" tabIcon="cloud-upload" tabTitle="Upload" [root]="UploadPage"></ion-tab>
+    <ion-tab [show]="userStorage.sessionPresent()" tabIcon="cloud-upload" tabTitle="Upload" [root]="UploadPage"></ion-tab>
 
-    <ion-tab [show]="!userAuth.hasLoggedIn" tabIcon="md-log-in" tabTitle="Login/Register" [root]="LoginRegisterPage"></ion-tab>
+    <ion-tab [show]="!userStorage.sessionPresent()" tabIcon="md-log-in" tabTitle="Login/Register" [root]="LoginRegisterPage"></ion-tab>
     <ion-tab tabIcon="search" tabTitle="Search" [root]="SearchPage"></ion-tab>
     <ion-tab tabIcon="menu" tabTitle="Menu" [root]="MenuPage"></ion-tab>
 
