@@ -13,7 +13,7 @@
 
     <ion-row justify-content-center>
 
-      <ion-item style="background-color: #32db64; border-radius: 25px; color: #32db64; width: 150px; height: 50px">
+      <ion-item id="chooseFileButton">
       <ion-input type="file"
                  text-center
                  accept="image/*, video/*, audio/*"
@@ -22,11 +22,11 @@
     </ion-item>
 
       <button type="button"
+              id="cameraButton"
               *ngIf="platform.is('cordova')"
               ion-button
               round
               large
-              style="font-size: medium; width: 150px"
               (click)="useCamera()">Use Camera
       </button>
     </ion-row>
@@ -34,7 +34,7 @@
 
     <div text-center>
     <div class="form-group">
-      <ion-label stacked style="color: blue; font-size: large">Title</ion-label>
+      <ion-label stacked>Title</ion-label>
       <ion-input
         text-center
         type="text"
@@ -47,15 +47,14 @@
         minlength="3">
       </ion-input>
       <div class="form-control-feedback" *ngIf="fileTitle.errors && (fileTitle.dirty || fileTitle.touched)">
-        <p *ngIf="fileTitle.errors" style="color: #f53d3d">Title needs to be 3 - 20 characters</p>
+        <p *ngIf="fileTitle.errors">Title needs to be 3 - 20 characters</p>
       </div>
     </div>
 
 
-      <!--UI for price and location-->
 
-   <!-- <div class="form-group"> &lt;!&ndash;[(ngModel)]="" to be defined based on description interface&ndash;&gt;
-      <ion-label stacked style="color: blue; font-size: large">Price</ion-label>
+    <div class="form-group"> <!--[(ngModel)]="" to be defined based on description interface-->
+      <ion-label stacked>Price</ion-label>
       <ion-input
         type="number"
         text-center
@@ -66,13 +65,13 @@
         #itemPrice="ngModel">
       </ion-input>
       <div class="form-control-feedback" *ngIf="itemPrice.errors && (itemPrice.dirty || itemPrice.touched)">
-        <p *ngIf="itemPrice.errors" style="color: #f53d3d">Price is required</p>
+        <p *ngIf="itemPrice.errors">Price is required</p>
       </div>
-    </div>-->
+    </div>
 
 
-    <!--<div class="form-group"> &lt;!&ndash;[(ngModel)]="" to be defined based on description interface&ndash;&gt;
-      <ion-label stacked style="color: blue; font-size: large">Location</ion-label>
+    <div class="form-group"> <!--[(ngModel)]="" to be defined based on description interface-->
+      <ion-label stacked>Location</ion-label>
       <ion-input
         text-center
         type="text"
@@ -83,14 +82,13 @@
         #itemLocation="ngModel">
       </ion-input>
       <div class="form-control-feedback" *ngIf="itemLocation.errors && (itemLocation.dirty || itemLocation.touched)">
-        <p *ngIf="itemLocation.errors" style="color: #f53d3d">Location is required</p>
+        <p *ngIf="itemLocation.errors">Location is required</p>
       </div>
-    </div>-->
-
+    </div>
 
 
     <div class="form-group">
-      <ion-label stacked style="color: blue; font-size: large">Description</ion-label>
+      <ion-label stacked>Description</ion-label>
       <ion-textarea type="text"
                     text-center
                     [(ngModel)]="description"
@@ -102,9 +100,26 @@
                     maxlength="100"></ion-textarea>
       <div class="form-control-feedback"
            *ngIf="fileDescription.errors && (fileDescription.dirty || fileDescription.touched)">
-        <p *ngIf="fileDescription.errors" style="color: #f53d3d">Description length needs to be 10 - 100 characters</p>
+        <p *ngIf="fileDescription.errors" >Description length needs to be 10 - 100 characters</p>
       </div>
     </div>
+    </div>
+
+
+    <div class="form-group"> <!--[(ngModel)]="" to be defined based on description interface-->
+      <ion-label stacked >Contact Number</ion-label>
+      <ion-input
+        text-center
+        type="number"
+        placeholder="Enter a phone number"
+        [(ngModel)]="title"
+        name="contactNumber"
+        required
+        #contactNumber="ngModel">
+      </ion-input>
+      <div class="form-control-feedback" *ngIf="contactNumber.errors && (contactNumber.dirty || contactNumber.touched)">
+        <p *ngIf="contactNumber.errors" >Contact number is required</p>
+      </div>
     </div>
 
 

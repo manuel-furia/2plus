@@ -1,3 +1,28 @@
 page-upload {
 
+  #chooseFileButton{
+    background-color: #32db64;
+    border-radius: 25px;
+    color: #32db64;
+    width: 145px;
+    height: 50px;
+    margin-right: 15px;
+  }
+
+  #cameraButton{
+    font-size: medium;
+    width: 140px;
+  }
+
+  ion-label{
+    text-align: center;
+    font-size: large !important;
+    color: blue;
+  }
+
+  .form-control-feedback{
+    text-align: center;
+    color: red;
+  }
+
 }
