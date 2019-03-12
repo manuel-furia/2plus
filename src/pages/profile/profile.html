@@ -5,37 +5,115 @@
 </ion-header>
 
 
-<ion-content padding>
-
+<ion-content class="card-background-page">
   <ion-card>
-    <pinch-zoom *ngIf="avatarID != null && avatarID != 'undefined'" >
+    <pinch-zoom *ngIf="avatarID != null && avatarID != 'undefined'">
       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-      <img *ngIf="avatarID != null && avatarID != 'undefined'" [src]="filePath + (avatarID | thumbnail:'large' | async)"/>
+      <img *ngIf="avatarID != null && avatarID != 'undefined'"
+           [src]="filePath + (avatarID | thumbnail:'large' | async)"/>
     </pinch-zoom>
 
     <ion-card-content>
-        <ion-item text-center> <span class="field">Username:</span> <span class="content">{{userAuth.user.username}}</span> </ion-item>
-        <ion-item *ngIf="userAuth.user.full_name"><span class="field">Full name: </span><span class="content">{{ userAuth.user.full_name}}</span>  </ion-item>
-        <ion-item text-center><span class="field">Email:</span> <span class="content">{{userAuth.user.email}}</span> </ion-item>
+      <ion-item text-center><span class="field">Username:</span> <span class="content">{{userAuth.user.username}}</span>
+      </ion-item>
+      <ion-item *ngIf="userAuth.user.full_name"><span class="field">Full name: </span><span
+        class="content">{{ userAuth.user.full_name}}</span></ion-item>
+      <ion-item text-center><span class="field">Email:</span> <span class="content">{{userAuth.user.email}}</span>
+      </ion-item>
     </ion-card-content>
   </ion-card>
 
-  <ion-list>
-    <ion-row justify-content-center>
-      <button ion-button round (click)="setAvatar()"> Update Avatar</button>
-    </ion-row>
-    <ion-row justify-content-center>
-      <button ion-button round
-              (click)="goToMyItemsPage()" color="primary"> Manage My Items
-      </button>
-    </ion-row>
-    <ion-row justify-content-center>
-      <button ion-button round color="danger" item-start="end" (click)="logout()">Log Out</button>
-    </ion-row>
-    <ion-row justify-content-center>
-      <button ion-button round color="danger" item-start="end" (click)="deleteAccount()">Delete Account</button>
-    </ion-row>
-    <ion-row justify-content-center></ion-row>
-  </ion-list>
 
+  <div text-center>
+    <button ion-button round (click)="setAvatar()"> Update Avatar</button>
+  </div>
+
+  <div text-center>
+    <button ion-button round (click)="showUserInfoForm()"> Update User Info</button>
+    <form *ngIf="showUpdateForm" (ngSubmit)="updateUserInfo()" name="updateUserInfoForm" #updateUserInfoForm="ngForm"
+          id="updateUserInfoForm">
+      <ion-list>
+        <div class="form-group">
+          <ion-label stacked text-center>Username</ion-label>
+          <ion-input type="text"
+                     text-center
+                     class="form-control"
+                     name="username"
+                     id="username"
+                     pattern="[A-Za-z]{3,}"
+                     minlength="3"
+                     placeholder="Enter new username"
+                     [(ngModel)]="user.username"
+                     #username="ngModel"
+                     (ionBlur)="checkUsername()"></ion-input>
+          <div class="form-control-feedback" text-center
+               *ngIf="username.errors && (username.dirty || username.touched)">
+            <p *ngIf="username.errors" style="color: #f53d3d">Username needs to be at least 3 letters
+              (no numbers or special characters)</p>
+          </div>
+        </div>
+
+
+        <div class="form-group">
+          <ion-label stacked text-center>Email</ion-label>
+          <ion-input type="text"
+                     text-center
+                     class="form-control"
+                     placeholder="Enter new Email"
+                     name="email"
+                     id="email"
+                     pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                     [(ngModel)]="user.email"
+                     #email="ngModel"
+          ></ion-input>
+          <div class="form-control-feedback" text-center
+               *ngIf="email.errors && (email.dirty || email.touched)">
+            <p *ngIf="email.errors" style="color: #f53d3d">Email format: characters@characters.domain</p>
+          </div>
+
+        </div>
+
+
+        <div class="form-group">
+          <ion-label stacked text-center>Password</ion-label>
+          <ion-input type="password"
+                     text-center
+                     placeholder="Enter new password"
+                     name="password"
+                     id="password"
+                     [(ngModel)]="user.password"
+                     #password="ngModel"
+                     pattern="(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+          </ion-input>
+          <div class="form-control-feedback" text-center
+               *ngIf="password.errors && (password.dirty || password.touched)">
+            <p *ngIf="password.errors" style="color: #f53d3d">Password needs to be at least 8 characters containing at
+              least one number, one uppercase and lowercase letter</p>
+          </div>
+
+        </div>
+      </ion-list>
+      <div text-center>
+        <button ion-button class="submit-btn" round type="submit" color="secondary" id="updateBtn"
+                [disabled]="!updateUserInfoForm.form.valid">Update
+        </button>
+        <button ion-button round type="button" color="danger" id="cancelBtn" (click)="showUpdateForm=false">Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div text-center>
+    <button ion-button round
+            (click)="goToMyItemsPage()" color="primary"> Manage My Items
+    </button>
+  </div>
+
+  <div text-center>
+    <button ion-button round color="danger" item-start="end" (click)="logout()">Log out</button>
+  </div>
+
+  <div text-center>
+    <button ion-button round color="danger" item-start="end" (click)="deleteAccount()">Delete Account</button>
+  </div>
 </ion-content>
