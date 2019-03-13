@@ -31,4 +31,11 @@ export class ConfigProvider {
     return this.appTag + 'profile' + user_id;
   }
 
+  /**
+   * How many pictures appear in the search result.
+   */
+  public getSearchResultLimits(): number {
+    return 30;
+  }
+
 }

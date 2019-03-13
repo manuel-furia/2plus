@@ -14,7 +14,6 @@
       <ion-item>
         <ion-label style="color: blue; font-size: large">Keyword</ion-label>
         <ion-input placeholder="Keyword is required"
-                   required
                    type="text"
                    name="searchTerm"
                    id="searchTerm"
@@ -23,22 +22,7 @@
         </ion-input>
       </ion-item>
     </ion-row>
-      <div class="form-control-feedback"  *ngIf="keyword.errors && (keyword.dirty || keyword.touched)">
-        <p *ngIf="keyword.errors" style="color: #f53d3d">Please enter a keyword</p>
-      </div>
     </div>
-
-    <ion-row>
-      <ion-item>
-        <ion-label style="color: blue; font-size: large">Publish Date</ion-label>
-        <ion-select [(ngModel)]="publishDate" name="publishDate">
-          <ion-option value="day">Today</ion-option>
-          <ion-option value="week">This Week</ion-option>
-          <ion-option value="month">This Month</ion-option>
-          <ion-option value="year">This Year</ion-option>
-        </ion-select>
-      </ion-item>
-    </ion-row>
 
     <ion-row>
       <ion-item>
@@ -84,16 +68,16 @@
 
   <ion-list *ngIf="!showSearchForm">
 
-    <ion-item *ngFor="let media of mediaArray | async">
+    <ion-item *ngFor="let item of itemsArray">
       <ion-thumbnail item-start="">
-        <img [src]= "uploadUrl + (media.file_id | thumbnail:'default' | async)" [alt]="media.title" >
+        <img [src]= "uploadUrl + item.otherMedia[0].thumbnail" [alt]="item.title" >
       </ion-thumbnail>
 
-      <h2>{{media.title}}</h2>
-      <p>{{media.time_added | date: ('dd.MM.yy')}}</p>
-      <p>{{media.description}}</p>
+      <h2>{{item.title}}</h2>
+      <p>{{item.time_added | date: ('dd.MM.yy')}}</p>
+      <p>{{item.descriptors.description}}</p>
 
-      <button ion-button round  (click)="viewSingleMedia(media.file_id)">View</button>
+      <button ion-button round  (click)="viewSingleMedia(item.item_id)">View</button>
 
     </ion-item>
 

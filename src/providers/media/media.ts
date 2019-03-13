@@ -8,7 +8,7 @@ import { Observable } from "rxjs";
 import { StorageProvider } from "../storage/storage";
 import { NotificationResponse } from "../../interfaces/notificationResponse";
 import { MediaListingResponseEntry } from "../../interfaces/mediaListingResponseEntry";
-import { MediaUpdateRequest } from "../../interfaces/mediaUpdateRequest";
+import { ItemUpdateRequest } from "../../interfaces/itemUpdateRequest";
 import { UploadMediaResponse } from "../../interfaces/uploadMediaResponse";
 import { UploadMediaRequest } from "../../interfaces/uploadMediaRequest";
 import { MediaDescriptors } from "../../interfaces/mediaDescriptors";

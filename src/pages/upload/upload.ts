@@ -25,14 +25,14 @@ import { HomePage } from "../home/home";
 })
 
 export class UploadPage {
-    cities: string[];
+  cities: string[];
   price: number;
   city: string;
   category: string;
   contact: string;
   files: FileInfo[] = [this.getDefaultFileEntry()];
-  title = '';
-  description = '';
+  title: string;
+  description: string;
   public hasFile: Boolean = false;
   @ViewChild('uploadForm') uploadForm: any;
 
@@ -150,10 +150,6 @@ export class UploadPage {
 
 
   private getItemData() {
-    const description = this.description;
-    const filters = this.filters;
-    const title = this.title;
-    const files = this.files;
     return <ItemUploadInfo>{
       title: this.title,
       description: this.description,

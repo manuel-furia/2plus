@@ -11,4 +11,5 @@ export interface ItemDescriptors{
   price: number;
   city: NamedLocation;
   category: string;
+  contact: string;
 }

@@ -1,7 +1,7 @@
 /**
  * Represents a request to update item info
  */
-export interface MediaUpdateRequest {
+export interface ItemUpdateRequest {
   title: string;
   description: string;
 }

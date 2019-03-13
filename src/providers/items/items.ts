@@ -10,7 +10,7 @@ import { UserProvider } from "../users/user";
 import { MediaProvider } from "../media/media";
 import { MediaResponse } from "../../interfaces/mediaResponse";
 import { ItemDescriptors } from "../../interfaces/itemDescriptors";
-import { MediaUpdateRequest } from "../../interfaces/mediaUpdateRequest";
+import { ItemUpdateRequest } from "../../interfaces/itemUpdateRequest";
 import { StorageProvider } from "../storage/storage";
 import { NotificationResponse } from "../../interfaces/notificationResponse";
 import { ImageFilters } from "../../interfaces/imageFilters";
@@ -19,6 +19,8 @@ import { GeoLocation } from "../../interfaces/geoLocation";
 import { MediaDescriptors } from "../../interfaces/mediaDescriptors";
 import { UriUtils } from "../utils/uriUtils";
 import { UploadMediaResponse } from "../../interfaces/uploadMediaResponse";
+import { SearchParameters } from "../../interfaces/searchParameters";
+import { GeoProvider } from "../geo/geo";
 
 /**
  * Provide information about items for sale/free.
@@ -33,7 +35,8 @@ export class ItemsProvider {
               private users: UserProvider,
               private mediaProvider: MediaProvider,
               private userSession: StorageProvider,
-              private uriUtils: UriUtils) { }
+              private uriUtils: UriUtils,
+              private geo: GeoProvider) { }
 
   /**
    * Get all the items relevant to this app (tagged with 2plus).
@@ -41,7 +44,7 @@ export class ItemsProvider {
    * @return all the items that are tagged with a specific tag
    */
   public getRelevantItems(): Observable<Item[]> {
-    return this.getItems(this.config.getAppTag());
+    return this.getItems(this.config.getAppItemTag());
   }
 
   /**
@@ -108,7 +111,7 @@ export class ItemsProvider {
    * @param data the new information
    * @return a notification response from the server
    */
-  updateItemInfo(item_id: number, data:MediaUpdateRequest){
+  updateItemInfo(item_id: number, data: ItemUpdateRequest){
     const modifyFilePath:string = "http://media.mw.metropolia.fi/wbma/media/"+item_id;
     let accessToken = this.userSession.loadSessionToken() || '';
     const httpOptions = {
@@ -120,6 +123,10 @@ export class ItemsProvider {
     return this.http.put<NotificationResponse>(modifyFilePath, data, httpOptions);
   }
 
+  /**
+   * Upload an item to the server.
+   * @param itemInfo the information about the item to upload
+   */
   public uploadItem(itemInfo: ItemUploadInfo): Observable<UploadMediaResponse>{
     const uploadedMedias = itemInfo.medias.map(
       media => {
@@ -136,11 +143,12 @@ export class ItemsProvider {
         price: itemInfo.price,
         city: {city: itemInfo.location, country: 'FI'},
         category: itemInfo.category,
-        discriminator: 'ItemDescriptors'
+        discriminator: 'ItemDescriptors',
+        contact: itemInfo.contact
       };
       const description = JSON.stringify(descriptors);
       const itemBlankFile = this.uriUtils.dataURItoFile('data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==');
-      return this.mediaProvider.uploadMedia({file: itemBlankFile, description: description, title: ''}, this.config.getAppItemTag());
+      return this.mediaProvider.uploadMedia({file: itemBlankFile, description: description, title: itemInfo.title}, this.config.getAppItemTag());
     });
   }
 
@@ -169,8 +177,10 @@ export class ItemsProvider {
       ...(descriptors.media_ids.map(media_id => this.mediaProvider.getMedia(media_id)))
     );
 
+    console.log(mediaResponse);
+
     return Observable.zip(userObs, mainMediaObs, mediaObs).flatMap(([user, mainMedia, medias]) => Observable.of(<Item>{
-      item_id: mediaResponse.user_id,
+      item_id: mediaResponse.file_id,
       title: mediaResponse.title,
       descriptors: descriptors,
       mainMedia: mainMedia,
@@ -180,18 +190,44 @@ export class ItemsProvider {
     }));
   }
 
-
-  search(data:object){
-    const searchMediaPath:string = "http://media.mw.metropolia.fi/wbma/media/search";
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-type': 'application/json',
-        'x-access-token': this.userSession.loadSessionToken() || ''
-      }),
-    };
-    return this.http.post<MediaListingResponseEntry[]>(searchMediaPath, data, httpOptions);
+  /**
+   * Search for items.
+   * @param parameters search parameters
+   */
+  public search(parameters: SearchParameters): Observable<Item[]>{
+    return this.getRelevantItems().flatMap(items => {
+      const itemsWithScores = items.map(item => ({item: item, score: this.computeScore(item, parameters)}));
+      console.log(itemsWithScores);
+      const results = itemsWithScores.sort((x, y) => x.score > y.score ? -1 : (x.score < y.score ? 1 : 0))
+        .map(elem => elem.item)
+        .slice(0, this.config.getSearchResultLimits());
+      console.log(results);
+      return Observable.of(results);
+    })
   }
 
+
+  private computeScore(item: Item, parameters: SearchParameters): number {
+    let score = 0;
+    if (parameters.title !== undefined && item.title.includes(parameters.title)){
+      score += 10;
+    }
+    if (parameters.description !== undefined && item.descriptors.description.includes(parameters.description)){
+      score += 3;
+    }
+    if (parameters.location !== undefined){
+      const distance = this.geo.distanceBewteenCities(parameters.location)(item.descriptors.city.city);
+      if (distance !== null){
+        score += 10 - distance / 10;
+      }
+    }
+    if (parameters.ascPrice){
+      score -= item.descriptors.price / 50.0;
+    } else {
+      score += item.descriptors.price / 50.0;
+    }
+    return score;
+  }
 
 
 }

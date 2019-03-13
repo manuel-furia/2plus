@@ -1,8 +1,9 @@
 page-single-item {
 
   .field{
-    color: #488aff !important;
+    color: color($colors, primary) !important;
     padding-right: 10px;
+    font-weight: bold;
   }
 
   .content{
@@ -38,8 +39,23 @@ page-single-item {
     }
   }
 
+  ion-card{
+    padding: 15px;
+  }
+
+  ion-slide {
+    text-align: center;
+  }
+
+  .singleItemImg {
+    max-width: 500px;
+    max-height: 500px;
+    border-radius: 10px;
+  }
+
 
   ion-card-title{
     font-weight: bold !important;
   }
+
 }

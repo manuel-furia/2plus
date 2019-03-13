@@ -21,8 +21,10 @@ export class UpdateItemPage {
     this.file_id = this.navParams.get('file_id');
   }
 
-  title = '';
-  description = '';
+  title: string;
+  price: number;
+  location: string;
+  description: string;
   file_id;
 
   @ViewChild('modifyForm') modifyForm: any;
