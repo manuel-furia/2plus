@@ -1,6 +1,32 @@
 page-profile {
   ion-card{
     padding-top: 10px;
+    background-color: inherit !important;
+    border: unset !important;
+    box-shadow: unset !important;
+    img{
+      max-width: 400px !important;
+      max-height: 300px !important;
+      border: 1px #c3c3c3;
+      border-radius: 90px;
+      box-shadow: 2px 2px 3px 3px #bdbdbd;
+    }
+
+    ion-card-content{
+      ion-item{
+        background-color: inherit !important;
+      }
+    }
+  }
+
+  ion-list{
+    padding-bottom: 20px !important;
+      button{
+        &:hover{
+          background-color: gainsboro !important;
+          color: #222222;
+        }
+      }
   }
 
   .field{
@@ -16,11 +42,12 @@ page-profile {
   }
 
   #updateUserInfoForm{
-    background-color: lightgoldenrodyellow;
+    background-color: white;
+    margin-top: 20px;
+    margin-bottom: 20px;
     padding: 10px 0;
-    margin: 10px 0;
     border: 2px solid #ddddba;
-    border-radius: 2px;
+    border-radius: 10px;
     box-shadow: 1px 1px 1px 1px #cfcfcf;
 
     ion-label, ion-input{
@@ -29,6 +56,13 @@ page-profile {
 
     #updateBtn, #cancelBtn{
       width: 80px !important;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    #updateUserInfoForm{
+      max-width: 60%;
+      margin-left: 20%;
     }
 
   }
