@@ -63,7 +63,7 @@ export class MyItemsPage {
     this.dialog.confirmationAlert('Do you really want to delete this element?').subscribe(confirm => {
       if (confirm) {
         this.mediaProvider.deleteFile(file_id).subscribe(deleteRes => {
-          this.mediaProvider.presentToast(deleteRes.message);
+          this.dialog.presentToast(deleteRes.message);
           this.navCtrl.push(MyItemsPage);
         })
       }

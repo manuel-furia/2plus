@@ -6,6 +6,7 @@ import { User } from '../../interfaces/user';
 import { Observable } from "rxjs";
 import { UserInfoResponse } from "../../interfaces/userInfoResponse";
 import { StorageProvider } from "../storage/storage";
+import { NotificationResponse } from "../../interfaces/notificationResponse";
 
 @Injectable()
 /**
@@ -52,14 +53,29 @@ export class UserProvider {
    * @param userID the id of the user to delete
    * @return true if success, false if failure
    */
-  public deleteUser(userID): Observable<boolean>{
+  public deleteUser(userID): Observable<NotificationResponse>{
     const deleteUserPath:string = "http://media.mw.metropolia.fi/wbma/users/"+userID;
     const httpOptions = {
       headers: new HttpHeaders({
         'x-access-token': this.userSession.loadSessionToken() || ''
       }),
     };
-    return this.http.delete<Response>(deleteUserPath, httpOptions).flatMap(res => Observable.of(res.status < 400));
+    return this.http.delete<NotificationResponse>(deleteUserPath, httpOptions);
+  }
+
+  /**
+   * Updates the infomation about a user.
+   * @param data
+   */
+  updateUserInfo(data){
+    const updateUserDataPath:string = "http://media.mw.metropolia.fi/wbma/users/";
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-type': 'application/json',
+        'x-access-token': this.userSession.loadSessionToken() || ''
+      }),
+    };
+    return this.http.put<NotificationResponse>(updateUserDataPath, data, httpOptions);
   }
 
 }

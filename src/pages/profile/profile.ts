@@ -8,6 +8,7 @@ import { LoginProvider } from "../../providers/login/login";
 import { StorageProvider } from "../../providers/storage/storage";
 import { ConfigProvider } from "../../providers/config/config";
 import { UserProvider } from "../../providers/users/user";
+import { DialogProvider } from "../../providers/dialog/dialog";
 
 @IonicPage()
 @Component({
@@ -22,7 +23,8 @@ export class ProfilePage {
     public userAuth: LoginProvider,
     public mediaProvider: MediaProvider,
     public userSession: StorageProvider,
-    private users: UserProvider) {
+    private users: UserProvider,
+    private dialog: DialogProvider) {
   }
 
   public filePath = 'http://media.mw.metropolia.fi/wbma/uploads/';
@@ -88,8 +90,8 @@ export class ProfilePage {
   deleteAccount() {
     const user = this.userSession.loadSessionUser();
     if (user !== null) {
-      this.mediaProvider.deleteUser(user.user_id).subscribe(res => {
-        this.mediaProvider.presentToast(res.message);
+      this.users.deleteUser(user.user_id).subscribe(res => {
+        this.dialog.presentToast(res.message);
         this.userSession.deleteSession();
       });
     }
@@ -98,7 +100,7 @@ export class ProfilePage {
   updateUserInfo() {
     let newData={};
     if(this.user.username != null){
-       newData["username"]= this.user.username;
+      newData["username"]= this.user.username;
     }
     if(this.user.email != null){
       newData['email']=this.user.email;
@@ -109,9 +111,9 @@ export class ProfilePage {
 
     console.log('new user data: ', newData);
 
-    this.mediaProvider.updateUserInfo(newData).subscribe(res => {
+    this.users.updateUserInfo(newData).subscribe(res => {
       console.log('update user data res: ', res.message);
-      this.mediaProvider.presentToast(res.message);
+      this.dialog.presentToast(res.message);
 
       this.updateUserInfoForm.reset();
       this.showUpdateForm = false;
