@@ -45,7 +45,7 @@
         minlength="3">
       </ion-input>
       <div class="form-control-feedback" *ngIf="fileTitle.errors && (fileTitle.dirty || fileTitle.touched)">
-        <p *ngIf="fileTitle.errors">Title needs to be 3 - 20 characters</p>
+        <p *ngIf="fileTitle.errors">Title is required and needs to be 3 - 20 characters</p>
       </div>
     </div>
 
@@ -98,7 +98,7 @@
                     maxlength="100"></ion-textarea>
       <div class="form-control-feedback"
            *ngIf="fileDescription.errors && (fileDescription.dirty || fileDescription.touched)">
-        <p *ngIf="fileDescription.errors" >Description length needs to be 10 - 100 characters</p>
+        <p *ngIf="fileDescription.errors" >Description is required and needs to be of 10 - 100 characters</p>
       </div>
     </div>
     </div>
@@ -113,10 +113,12 @@
         [(ngModel)]="title"
         name="contactNumber"
         required
+        minlength="5"
+        maxlength="30"
         #contactNumber="ngModel">
       </ion-input>
       <div class="form-control-feedback" *ngIf="contactNumber.errors && (contactNumber.dirty || contactNumber.touched)">
-        <p *ngIf="contactNumber.errors" >Contact number is required</p>
+        <p *ngIf="contactNumber.errors" >Contact number is required and needs to be of 5 - 30 numbers</p>
       </div>
     </div>
 
