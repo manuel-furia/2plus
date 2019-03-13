@@ -1,6 +1,5 @@
 page-profile {
   ion-card{
-    padding-top: 10px;
     background-color: inherit !important;
     border: unset !important;
     box-shadow: unset !important;
@@ -9,7 +8,6 @@ page-profile {
       max-height: 300px !important;
       border: 1px #c3c3c3;
       border-radius: 90px;
-      box-shadow: 2px 2px 3px 3px #bdbdbd;
     }
 
     ion-card-content{

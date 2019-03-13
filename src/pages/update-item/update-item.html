@@ -60,7 +60,22 @@
       </div>
     </div>
 
-
+    <div class="form-group"> <!--[(ngModel)]="" to be defined based on description interface-->
+      <ion-label stacked >Contact</ion-label>
+      <ion-input
+        text-center
+        type="number"
+        placeholder="new contact number"
+        [(ngModel)]="title"
+        name="contactNumber"
+        minlength="5"
+        maxlength="30"
+        #contactNumber="ngModel">
+      </ion-input>
+      <div class="form-control-feedback" *ngIf="contactNumber.errors && (contactNumber.dirty || contactNumber.touched)">
+        <p *ngIf="contactNumber.errors" >Contact number needs to be of 5 - 30 numbers</p>
+      </div>
+    </div>
 
     <div class="form-group">
       <ion-label stacked>Description</ion-label>

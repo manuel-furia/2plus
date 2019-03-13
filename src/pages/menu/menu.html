@@ -16,7 +16,7 @@
        <button ion-button round
                *ngIf="userAuth.hasLoggedIn" color="secondary" (click)="goToUploadPage()">UPLOAD</button>
      </ion-row>
-     <ion-row justify-content-center>
+     <ion-row justify-content-center *ngIf="userAuth.hasLoggedIn">
        <button ion-button round  (click)="goToSearchPage()">SEARCH</button>
      </ion-row>
      <ion-row justify-content-center>
