@@ -1,12 +1,9 @@
-import { GeoLocation } from "./geoLocation";
+import { ImageFilters } from "./imageFilters";
 
 /**
- * Additional JSON descriptors associated with a media or item.
+ * Additional JSON descriptors associated with a non-item media.
  */
 export interface MediaDescriptors{
-  description: string;
-  media_ids: [number];
-  price: number;
-  location: [GeoLocation];
-  isItem: boolean;
+  isImage: boolean;
+  filters?: ImageFilters;
 }

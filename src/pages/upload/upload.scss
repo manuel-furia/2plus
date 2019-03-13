@@ -4,14 +4,23 @@ page-upload {
     background-color: #32db64;
     border-radius: 25px;
     color: #32db64;
-    width: 145px;
-    height: 50px;
-    margin-right: 15px;
   }
 
   #cameraButton{
     font-size: medium;
     width: 140px;
+  }
+
+  #chooseFileButton ion-input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 80px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
   }
 
   ion-label{
@@ -23,6 +32,13 @@ page-upload {
   .form-control-feedback{
     text-align: center;
     color: red;
+  }
+
+  img {
+    height: 70vh;
+    width: auto;
+    margin: auto;
+    display: block;
   }
 
 }

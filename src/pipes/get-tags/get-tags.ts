@@ -22,12 +22,14 @@ export class GetTagsPipe implements PipeTransform {
 
         let profileFound:Boolean = false;
         files.forEach((file: Media) => {
-          if (file.user_id === this.userStorage.loadSessionUser().user_id) {
+          const user = this.userStorage.loadSessionUser();
+          if (user === null) return;
+          if (file.user_id === user.user_id) {
             profileFound = true;
-            resolve(file.file_id);
+            resolve(file.media_id);
           }
           else {
-            console.log("profile not found: " + file.user_id + '/' + this.userStorage.loadSessionUser().user_id);
+            console.log("profile not found: " + file.user_id + '/' + user.user_id);
             //reject('No profile image added.');
           }
         });

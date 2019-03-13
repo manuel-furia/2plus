@@ -1,29 +1,16 @@
-import { Tag } from '@angular/compiler/src/i18n/serializers/xml_helper';
+import { ImageFilters } from "./imageFilters";
 
+/**
+ * Represents a media, holding the information necessary to use it in the app.
+ */
 export interface Media {
-  file_id: number;
+  media_id: number;
   filename: string;
-  filesize: number;
-  title: string;
-  description: string;
-  user_id: number;
   media_type: string;
   mime_type: string;
-  time_added?: string;
-  screenshot?: string;
-  thumbnails: Thumbnail;
-  tags?: Tag;
-}
-
-export  interface Thumbnail {
-  w160?: string;
-  w320?: string;
-  w640?: string;
-}
-
-
-export interface Tag {
-  tag_id: number;
-  tag: string;
-  file_id: number;
+  time_added: string;
+  thumbnail: string;
+  user_id: number;
+  isImage: boolean;
+  filters?: ImageFilters;
 }

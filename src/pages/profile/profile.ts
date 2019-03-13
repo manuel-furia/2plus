@@ -4,9 +4,10 @@ import { MediaProvider } from '../../providers/media/media';
 import { MyItemsPage } from '../my-items/my-items';
 import { UploadPage } from '../upload/upload';
 import { Media } from '../../interfaces/media';
-import { User } from '../../interfaces/user';
 import { LoginProvider } from "../../providers/login/login";
 import { StorageProvider } from "../../providers/storage/storage";
+import { ConfigProvider } from "../../providers/config/config";
+import { UserProvider } from "../../providers/users/user";
 
 @IonicPage()
 @Component({
@@ -17,65 +18,66 @@ export class ProfilePage {
 
   constructor(
     public navCtrl: NavController,
-    public navParams: NavParams,
+    public config: ConfigProvider,
     public userAuth: LoginProvider,
     public mediaProvider: MediaProvider,
-    public storage: StorageProvider) {
+    public userSession: StorageProvider,
+    private users: UserProvider) {
   }
 
   public filePath = 'http://media.mw.metropolia.fi/wbma/uploads/';
   avatarID;
-  profileImages:Media[] =[];
-  user: User = {};
+  user = {username: '', full_name: '', email: '', password: ''};
   showUpdateForm: boolean = false;
   @ViewChild('updateUserInfoForm') updateUserInfoForm: any;
 
   ngOnInit() {
     this.getAvatar();
+    this.getUserInfo();
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ProfilePage');
-    // this.getAvatar();
+  }
+
+  getUserInfo(){
+    const user = this.userSession.loadSessionUser();
+    if (user === null) return;
+    this.users.getUserInfo(user.user_id).subscribe(info => {
+      this.user.username = user.username;
+      this.user.email = user.email;
+      this.user.full_name = user.full_name || '';
+    });
   }
 
   getAvatar() {
-    console.log('get avatar...');
-    this.mediaProvider.getMediaByTag('profile').subscribe(files => {
-     // console.log('files with tag profile', files);
-      if (files.length == 0) {
+    const user = this.userSession.loadSessionUser();
+    if (user === null) return;
+    this.mediaProvider.getMediaByTag(this.config.getAvatarTag(user.user_id)).subscribe(files => {
+      if (files.length < 1) {
         this.avatarID = undefined;
       } else{
-        files.forEach(file=>{
-          if(file.user_id == this.storage.loadSessionUser().user_id){
-            this.profileImages.push(file);
-          }
-        });
-          console.log('after compare', this.profileImages.length);
-          console.log('this user_id: ', this.storage.loadSessionUser().user_id);
-          console.log('my profile imgs?: ', this.profileImages);
-
-
-        if (this.profileImages.length == 0) {
-          this.avatarID = undefined;
-        } else{
-          this.avatarID = this.profileImages[this.profileImages.length - 1].file_id;
-          console.log('avatarID: ', this.avatarID);
-        }
+        const lastAvatar = files.sort((a, b) => {
+          const timeA = new Date(a.time_added);
+          const timeB = new Date(b.time_added);
+          return timeA > timeB ? -1 : timeA < timeB ? 1 : 0;
+        })[0];
+        this.avatarID = lastAvatar.media_id;
       }
 
     });
   }
 
   setAvatar() {
-    this.navCtrl.push(UploadPage, {
-      tag: 'profile',
-    });
-    console.log('set avatar :)');
+    const user = this.userSession.loadSessionUser();
+    if (user !== null) {
+      this.navCtrl.push(UploadPage, {
+        tag: this.config.getAvatarTag(user.user_id),
+      });
+    }
   }
 
   logout() {
-    this.storage.deleteSession();
+    this.userSession.deleteSession();
     this.navCtrl.parent.select(0);
   }
 
@@ -84,26 +86,25 @@ export class ProfilePage {
   }
 
   deleteAccount() {
-    this.mediaProvider.deleteUser(this.storage.loadSessionUser().user_id).subscribe(res => {
-      this.mediaProvider.presentToast(res.message);
-      localStorage.clear();
-    });
+    const user = this.userSession.loadSessionUser();
+    if (user !== null) {
+      this.mediaProvider.deleteUser(user.user_id).subscribe(res => {
+        this.mediaProvider.presentToast(res.message);
+        this.userSession.deleteSession();
+      });
+    }
   }
 
   updateUserInfo() {
     let newData={};
-    const user = this.storage.loadSessionUser();
     if(this.user.username != null){
        newData["username"]= this.user.username;
-       user.username = this.user.username;
     }
-    if(this.user.email != undefined){
+    if(this.user.email != null){
       newData['email']=this.user.email;
-      user.email = this.user.email;
     }
-    if(this.user.password != undefined){
+    if(this.user.password != null){
       newData['password']= this.user.password;
-      user.password = this.user.password;
     }
 
     console.log('new user data: ', newData);

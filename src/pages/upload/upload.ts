@@ -7,10 +7,16 @@ import {
   NavParams,
 } from 'ionic-angular';
 import { MediaProvider } from '../../providers/media/media';
-import { HomePage } from '../home/home';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { stringify, unescape } from 'querystring';
 import { ProfilePage } from '../profile/profile';
+import { UriUtils } from "../../providers/utils/uriUtils";
+import { ItemsProvider } from "../../providers/items/items";
+import { ItemUploadInfo } from "../../interfaces/itemUploadInfo";
+import { GeoLocation } from "../../interfaces/geoLocation";
+import { GeoProvider } from "../../providers/geo/geo";
+import { DialogProvider } from "../../providers/dialog/dialog";
+import { HomePage } from "../home/home";
 
 @IonicPage()
 @Component({
@@ -19,12 +25,14 @@ import { ProfilePage } from '../profile/profile';
 })
 
 export class UploadPage {
-
-  file: any;
-  filePath = '';
+    cities: string[];
+  price: number;
+  city: string;
+  category: string;
+  contact: string;
+  files: FileInfo[] = [this.getDefaultFileEntry()];
   title = '';
   description = '';
-  public isImage: Boolean = false;
   public hasFile: Boolean = false;
   @ViewChild('uploadForm') uploadForm: any;
 
@@ -45,10 +53,25 @@ export class UploadPage {
     public navParams: NavParams,
     public platform:Platform,
     public loadingCtrl: LoadingController,
-    public mediaProvider: MediaProvider) {
+    public itemsProvider: ItemsProvider,
+    public mediaProvider: MediaProvider,
+    public uriUtils: UriUtils,
+    public geo: GeoProvider,
+    public dialog: DialogProvider) {
     this.tag = this.navParams.get('tag');
     console.log('getting tag passed from profile page: ', this.tag);
   }
+
+  private getDefaultFileEntry(){
+    return {file: undefined, filePath: '', isImage: false,
+      filters: {
+        brightness: 100,
+        contrast: 100,
+        warmth: 0,
+        saturation: 100,
+      }
+    }
+  };
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad UploadPage');
@@ -57,77 +80,91 @@ export class UploadPage {
 
   }
 
-  handleChange($event) {
+  handleChange($event, fileIndex: number) {
     // console.log($event.target.files);
     // get the file from $event
-    this.file = $event.target.files[0];
+    this.files[fileIndex].file = $event.target.files[0];
 
-    if (this.file != null) {
+    if (this.files[fileIndex].file !== null) {
       this.hasFile = true;
     }
 
-// call showPreview
-    this.showPreview();
-    if (this.file.type.includes('image')) {
-      this.isImage = true;
+    this.showPreview(fileIndex);
+    const file = this.files[fileIndex].file;
+
+    if (file !== undefined && file.type.includes('image')) {
+      this.files[fileIndex].isImage = true;
     }
   }
 
-  showPreview() {
+  addMoreFiles(){
+    this.files.push(this.getDefaultFileEntry());
+  }
+
+  showPreview(fileIndex: number) {
     // show selected image in img
     const reader = new FileReader();
     reader.onloadend = (evt) => {
-      // console.log(reader.result);
-      this.filePath = reader.result;
+      this.files[fileIndex].filePath = reader.result;
     };
 
-    if (this.file.type.includes('video')) {
-      this.filePath = 'http://via.placeholder.com/500X200/000?text=Video';
-    } else if (this.file.type.includes('audio')) {
-      this.filePath = 'http://via.placeholder.com/500X200/000?text=Audio';
-    } else {
-      reader.readAsDataURL(this.file);
+    const file = this.files[fileIndex].file;
+
+    if (file !== undefined) {
+      if (file.type.includes('video')) {
+        this.files[fileIndex].filePath = 'http://via.placeholder.com/500X200/000?text=Video';
+      } else if (file.type.includes('audio')) {
+        this.files[fileIndex].filePath = 'http://via.placeholder.com/500X200/000?text=Audio';
+      } else {
+        reader.readAsDataURL(file);
+      }
     }
+  }
+
+  verifyLocation(){
+    if(this.geo.knownCities().map(city => city.toLocaleLowerCase()).indexOf(this.city.toLocaleLowerCase()) < 0){
+      this.dialog.presentToast('We could not find this city, town or municipality in Finland.');
+    }
+  }
+
+  private uploadItem(){
 
   }
 
   private uploadMedia() {
-    const formData = this.getFormData();
+    const data = this.getItemData();
 
-    this.mediaProvider.uploadMedia(formData).subscribe(response => {
+    this.itemsProvider.uploadItem(data).subscribe(response => {
 
       console.log('upload media response: ', response);
 
-      // show spinner
       if (response.message === 'File uploaded') {
         console.log('file uploaded');
 
         this.uploadForm.reset();
-        this.setAvatar(response);
+        this.navCtrl.push(HomePage);
       }
     });
 
   }
 
-  private getFormData() {
-//const description = `[d]${this.description}[/d]`;
+
+  private getItemData() {
     const description = this.description;
-    const filters = `[f]${JSON.stringify(this.filters)}[/f]`;
-    const formData = new FormData();
-    formData.append('title', this.title);
-    console.log('title: ', this.title);
-
-    formData.append('description', description);
-    console.log('description: ', description);
-
-    //formData.append('filter', filters);
-
-    formData.append('file', this.file);
-    // console.log('form data append file: ', this.file);
-    return formData;
+    const filters = this.filters;
+    const title = this.title;
+    const files = this.files;
+    return <ItemUploadInfo>{
+      title: this.title,
+      description: this.description,
+      price: this.price,
+      contact: this.contact || '',
+      location: this.city,
+      category: this.category,
+      medias: this.files.map(file => ({file: file.file, filter: file.filters}))};
   }
 
-  private useCamera() {
+  private useCamera(fileIndex: number) {
     const options: CameraOptions = {
       quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
@@ -140,36 +177,15 @@ export class UploadPage {
         this.hasFile = true;
 
         let base64Image = 'data:image/jpeg;base64,' + imageData;
-        this.filePath = base64Image;
+        this.files[fileIndex].filePath = base64Image;
 
-        this.file = this.dataURItoBlob(base64Image);
+        this.files[fileIndex].file = this.uriUtils.dataURItoFile(base64Image);
 
       },
       (error) => {
         console.log(error);
       });
 
-  }
-
-  private dataURItoBlob(dataURI) {
-    let byteString;
-    let mimeString;
-    let ia;
-
-    if (dataURI.split(',')[0].indexOf('base64') >= 0) {
-      byteString = atob(dataURI.split(',')[1]);
-    } else {
-      byteString = encodeURI(dataURI.split(',')[1]);
-    }
-    // separate out the mime component
-    mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-    // write the bytes of the string to a typed array
-    ia = new Uint8Array(byteString.length);
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-    return new Blob([ia], { type: mimeString });
   }
 
   private setAvatar(response) {
@@ -191,8 +207,9 @@ export class UploadPage {
   private cancelUpload() {
     console.log('reset form');
     this.uploadForm.reset();
-    this.filePath = '';
-    this.isImage = false;
+    this.files = [this.getDefaultFileEntry()];
+    this.title = '';
+    this.description = '';
   }
 
   private loading = this.loadingCtrl.create({
@@ -210,4 +227,14 @@ export class UploadPage {
 
 }
 
-
+interface FileInfo {
+  file?: File,
+  filePath?: String,
+  isImage?: boolean,
+  filters?: {
+    brightness: number,
+    contrast: number,
+    warmth: number,
+    saturation: number,
+  };
+}

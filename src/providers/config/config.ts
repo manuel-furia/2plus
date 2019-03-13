@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 @Injectable()
 /**
- * Handles toast messages to the user.
+ * To retrieve global configuration values.
  */
 export class ConfigProvider {
 
@@ -15,6 +15,20 @@ export class ConfigProvider {
    */
   public getAppTag(): string {
     return this.appTag;
+  }
+
+  /**
+   * Returns the tag associated with items for this app.
+   */
+  public getAppItemTag(): string {
+    return this.appTag + 'item';
+  }
+
+  /**
+   * Returns the tag associated with the avatars of a user.
+   */
+  public getAvatarTag(user_id: number): string {
+    return this.appTag + 'profile' + user_id;
   }
 
 }

@@ -12,7 +12,6 @@ import { ProfilePage } from '../pages/profile/profile';
 import { HttpClientModule } from '@angular/common/http';
 import { PipesModule } from '../pipes/pipes.module';
 import { MediaProvider } from '../providers/media/media';
-import { UserAuthenticationProvider } from '../providers/user-authentication/user-authentication';
 import { UploadPage } from '../pages/upload/upload';
 import { SearchPage } from '../pages/search/search';
 import { MyItemsPage } from '../pages/my-items/my-items';
@@ -22,6 +21,14 @@ import { SingleItemPage } from '../pages/single-item/single-item';
 import { PinchZoomModule } from 'ngx-pinch-zoom';
 import { UpdateItemPage } from '../pages/update-item/update-item';
 import { MenuPage } from '../pages/menu/menu';
+import { StorageProvider } from "../providers/storage/storage";
+import { ConfigProvider } from "../providers/config/config";
+import { DialogProvider } from "../providers/dialog/dialog";
+import { ItemsProvider } from "../providers/items/items";
+import { LoginProvider } from "../providers/login/login";
+import { UserProvider } from "../providers/users/user";
+import { UriUtils } from "../providers/utils/uriUtils";
+import { GeoProvider } from "../providers/geo/geo";
 
 @NgModule({
   declarations: [
@@ -63,7 +70,14 @@ import { MenuPage } from '../pages/menu/menu';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     MediaProvider,
-    UserAuthenticationProvider,
+    StorageProvider,
+    ConfigProvider,
+    DialogProvider,
+    ItemsProvider,
+    LoginProvider,
+    UserProvider,
+    UriUtils,
+    GeoProvider,
     Chooser,
     Camera,
     ]

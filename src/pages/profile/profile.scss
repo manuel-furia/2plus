@@ -15,4 +15,21 @@ page-profile {
     font-weight: bold;
   }
 
+  #updateUserInfoForm{
+    background-color: lightgoldenrodyellow;
+    padding: 10px 0;
+    margin: 10px 0;
+    border: 2px solid #ddddba;
+    border-radius: 2px;
+    box-shadow: 1px 1px 1px 1px #cfcfcf;
+
+    ion-label, ion-input{
+      font-weight: normal !important;
+    }
+
+    #updateBtn, #cancelBtn{
+      width: 80px !important;
+    }
+
+  }
 }

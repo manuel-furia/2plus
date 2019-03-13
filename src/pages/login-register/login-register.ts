@@ -15,10 +15,14 @@ import { DialogProvider } from "../../providers/dialog/dialog";
  */
 export class LoginRegisterPage {
 
-  username: string;
-  password: string;
-  email: string;
-  fullname: string | null;
+  user = {
+    username: '',
+    password: '',
+    email: '',
+    fullname: ''
+  };
+
+  confirm_password: string = '';
 
   constructor(
     public navCtrl: NavController,
@@ -41,7 +45,7 @@ export class LoginRegisterPage {
    * Send a login request to the server and store the resulting session if successful.
    */
   login() {
-    this.userAuth.login(this.username, this.password).subscribe(loginRes => {
+    this.userAuth.login(this.user.username, this.user.password).subscribe(loginRes => {
       if (loginRes && 'token' in loginRes && 'user' in loginRes) {
         this.storage.storeSession(loginRes.token, loginRes.user);
         this.dialog.presentToast(loginRes.message);
@@ -56,18 +60,27 @@ export class LoginRegisterPage {
    * Show an alert to the user if the username already exists.
    */
   checkUsername() {
-    this.userAuth.checkUsername (this.username).subscribe(res => {
-      if (!res) {
-        alert(`User ${this.username} already exists.`);
+    this.userAuth.checkUsername(this.user.username).subscribe(res => {
+      if (res) {
+        this.dialog.presentToast(`User ${this.user.username} already exists.`);
       }
     });
+  }
+
+  /**
+   * Alert the user if the password and confirmation do not match
+   */
+  verifyPassword() {
+    if (this.user.password !== this.confirm_password) {
+      this.dialog.presentToast('passwords do not match!');
+    }
   }
 
   /**
    * Register a new user.
    */
   register() {
-    this.userAuth.register(this.username, this.password, this.email, this.fullname).subscribe(registerRes => {
+    this.userAuth.register(this.user.username, this.user.password, this.user.email, this.user.fullname).subscribe(registerRes => {
       if (registerRes['message'] == 'User created successfully') {
         this.dialog.presentToast(registerRes['message']);
         this.login();

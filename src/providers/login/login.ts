@@ -3,11 +3,12 @@ import { Injectable } from '@angular/core';
 import { User } from '../../interfaces/user';
 import { LoginResponse } from '../../interfaces/loginResponse';
 import { Observable } from "rxjs";
+import { StorageProvider } from "../storage/storage";
 
 @Injectable()
 export class LoginProvider {
 
-  constructor(public http: HttpClient) {
+  constructor(public http: HttpClient, public userSession: StorageProvider) {
   }
 
   /**
@@ -29,13 +30,13 @@ export class LoginProvider {
    * Request the server for information about the existence of a username.
    * @param username the username
    */
-  public checkUsername(username: string){
+  public checkUsername(username: string): Observable<boolean>{
     const checkUsernamePath:string = "http://media.mw.metropolia.fi/wbma/users/username/"+username;
     return this.http.get(checkUsernamePath).flatMap(res => {
       if (!res['available']) {
-        return Observable.create(true);
+        return Observable.of(true);
       }
-      return Observable.create(false);
+      return Observable.of(false);
     });
   }
 
@@ -63,7 +64,7 @@ export class LoginProvider {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'x-access-token': localStorage.getItem('token') || '',
+        'x-access-token': this.userSession.loadSessionToken() || '',
       }),
     };
     return this.http.get<User>(userUrl, httpOptions);

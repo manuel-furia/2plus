@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Media } from '../../interfaces/media';
 import { MediaProvider } from '../../providers/media/media';
 import { SingleItemPage } from '../single-item/single-item';
+import { Item } from "../../interfaces/item";
 
 @IonicPage()
 @Component({
@@ -24,26 +25,20 @@ export class SearchPage {
   public mediaArray: Observable<Media[]>;
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SearchPage');
   }
   searchTerm;
 
-//search with title only, without filter terms yet
+  //search with title only, without filter terms yet
   search(){
-    console.log('search term: ', this.searchTerm);
     let data = {"title": this.searchTerm};
-    console.log('search term: ', data);
 
     this.mediaArray = this.mediaProvider.search(data);
       this.showSearchForm = false;
-
-    console.log('search mediaArray: ', this.mediaArray);
   }
 
 
 
   viewSingleMedia(file_id: number) {
-    console.log('view single search item: ', file_id);
     this.navCtrl.push(SingleItemPage,{
       file_id: file_id
     });

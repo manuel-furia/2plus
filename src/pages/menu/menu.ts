@@ -24,7 +24,7 @@ import { StorageProvider } from "../../providers/storage/storage";
 export class MenuPage {
 
   constructor(public navCtrl: NavController,
-              public storage: StorageProvider,
+              public userSession: StorageProvider,
               public userAuth: LoginProvider) {
   }
 
@@ -58,7 +58,7 @@ export class MenuPage {
   }
 
   logout() {
-    this.storage.deleteSession();
+    this.userSession.deleteSession();
     this.navCtrl.parent.select(0);
   }
 }

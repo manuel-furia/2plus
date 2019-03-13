@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { MediaProvider } from '../../providers/media/media';
-import { Media } from '../../interfaces/media';
 import { Observable } from 'rxjs';
-import { UserAuthenticationProvider } from '../../providers/user-authentication/user-authentication';
-import { User } from '../../interfaces/user';
 import { LoginRegisterPage } from '../login-register/login-register';
 import { SingleItemPage } from '../single-item/single-item';
 import { MyItemsPage } from '../my-items/my-items';
 import { UploadPage } from '../upload/upload';
 import { SearchPage } from '../search/search';
+import { ItemsProvider } from "../../providers/items/items";
+import { Item } from "../../interfaces/item";
+import { StorageProvider } from "../../providers/storage/storage";
 
 @Component({
   selector: 'page-home',
@@ -17,21 +16,21 @@ import { SearchPage } from '../search/search';
 })
 export class HomePage {
   mediaStoragePath = 'http://media.mw.metropolia.fi/wbma/uploads/';
-  mediaArray:Observable<Media[]>;
+  itemArray: Item[] = [];
 
 
   constructor(public navCtrl: NavController,
-              public mediaProvider:MediaProvider,
-              public userAuth:UserAuthenticationProvider) { }
+              public itemsProvider:ItemsProvider,
+              private userSession: StorageProvider) { }
 
   ngOnInit() {
     this.getAllMedia();
   }
 
-//TODO: GET ALL MEDIA BY TAGS('2PLUS')
   getAllMedia(){
-    console.log("homepage: gett all media...");
-    this.mediaArray = this.mediaProvider.getAllMedia();
+    this.itemsProvider.getRelevantItems().subscribe(items => {
+      this.itemArray = items;
+    });
   }
 
 //click on view button to view single media

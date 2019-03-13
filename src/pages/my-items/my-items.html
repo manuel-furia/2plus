@@ -7,18 +7,18 @@
 <ion-content padding>
   <ion-list>
 
-    <ion-item *ngFor="let media of mediaArray | async">
+    <ion-item *ngFor="let item of itemArray">
       <ion-thumbnail item-start="">
-        <img [src]= "uploadUrl + (media.file_id | thumbnail:'default' | async)" [alt]="media.title" >
+        <img [src]= "uploadUrl + (item.otherMedia[0].thumbnail)" [alt]="item.title" >
       </ion-thumbnail>
 
-      <h2 class="title">{{media.title}}</h2>
-      <h3 class="publishDate"> {{media.time_added | date: ('dd.MM.yy')}}</h3>  <!--MM: month mm: minuit-->
-      <p>{{media.description}}</p>
+      <h2 class="title">{{item.title}}</h2>
+      <h3 class="publishDate"> {{item.time_added | date: ('dd.MM.yy')}}</h3>  <!--MM: month mm: minuit-->
+      <p>{{item.description}}</p>
 
-      <button ion-button   (click)="viewSingleMedia(media.file_id)">View</button>
-      <button ion-button  color="secondary" (click)="goToUpdatePage(media.file_id)">Update</button>
-      <button ion-button  color="danger" (click)="deleteFile(media.file_id)">Delete</button>
+      <button ion-button   (click)="viewSingleMedia(item.item_id)">View</button>
+      <button ion-button  color="secondary" (click)="goToUpdatePage(item.item_id)">Update</button>
+      <button ion-button  color="danger" (click)="deleteFile(item.item_id)">Delete</button>
 
     </ion-item>
 

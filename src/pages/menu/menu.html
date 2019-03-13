@@ -12,26 +12,26 @@
     </ion-row>
     <ion-row justify-content-center>
       <button ion-button round
-              *ngIf="userAuth.hasLoggedIn" color="secondary" (click)="goToUploadPage()">UPLOAD</button>
+              *ngIf="userSession.sessionPresent()" color="secondary" (click)="goToUploadPage()">UPLOAD</button>
     </ion-row>
     <ion-row justify-content-center>
       <button ion-button round  (click)="goToSearchPage()">SEARCH</button>
     </ion-row>
     <ion-row justify-content-center>
       <button ion-button round  color="secondary"
-              *ngIf="userAuth.hasLoggedIn" (click)="goToMyItemsPage()">MY ITEMS</button>
+              *ngIf="userSession.sessionPresent()" (click)="goToMyItemsPage()">MY ITEMS</button>
     </ion-row>
     <ion-row justify-content-center>
       <button ion-button round  color="secondary"
-              *ngIf="!userAuth.hasLoggedIn" (click)="goToLoginPage()">LOGIN/REGISTER</button>
+              *ngIf="!userSession.sessionPresent()" (click)="goToLoginPage()">LOGIN/REGISTER</button>
     </ion-row>
     <ion-row justify-content-center>
       <button ion-button round
-              *ngIf="userAuth.hasLoggedIn" (click)="goToProfilePage()">PROFILE</button>
+              *ngIf="userSession.sessionPresent()" (click)="goToProfilePage()">PROFILE</button>
     </ion-row>
     <ion-row justify-content-center>
       <button ion-button round  color="danger"
-              *ngIf="userAuth.hasLoggedIn" (click)="logout()">LOG OUT</button>
+              *ngIf="userSession.sessionPresent()" (click)="logout()">LOG OUT</button>
     </ion-row>
   </ion-list>
 

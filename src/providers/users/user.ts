@@ -5,6 +5,7 @@ import { MediaListingResponseEntry } from '../../interfaces/mediaListingResponse
 import { User } from '../../interfaces/user';
 import { Observable } from "rxjs";
 import { UserInfoResponse } from "../../interfaces/userInfoResponse";
+import { StorageProvider } from "../storage/storage";
 
 @Injectable()
 /**
@@ -14,7 +15,8 @@ export class UserProvider {
 
   constructor(public http: HttpClient,
               public alertController: AlertController,
-              public toastCtrl: ToastController) { }
+              public toastCtrl: ToastController,
+              public userSession: StorageProvider) { }
 
 
   /**
@@ -24,8 +26,8 @@ export class UserProvider {
   public getUserInfo(user_id: number): Observable<User>{
     return this.requestUserInfo(user_id).flatMap(info =>
         'full_name' in info ?
-          Observable.create({ username: info.username, email: info.email, user_id: info.user_id }) :
-          Observable.create({ username: info.username, email: info.email, user_id: info.user_id, fullname: info.full_name})
+          Observable.of({ username: info.username, email: info.email, user_id: info.user_id }) :
+          Observable.of({ username: info.username, email: info.email, user_id: info.user_id, fullname: info.full_name})
     );
   }
 
@@ -38,7 +40,7 @@ export class UserProvider {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-type': 'application/json',
-        'x-access-token': localStorage.getItem('token')  || '',
+        'x-access-token': this.userSession.loadSessionToken() || '',
       })
     };
     return this.http.get<UserInfoResponse>(userInfoPath, httpOptions);
@@ -54,10 +56,10 @@ export class UserProvider {
     const deleteUserPath:string = "http://media.mw.metropolia.fi/wbma/users/"+userID;
     const httpOptions = {
       headers: new HttpHeaders({
-        'x-access-token': localStorage.getItem('token') || ''
+        'x-access-token': this.userSession.loadSessionToken() || ''
       }),
     };
-    return this.http.delete<Response>(deleteUserPath, httpOptions).flatMap(res => Observable.create(res.status < 400));
+    return this.http.delete<Response>(deleteUserPath, httpOptions).flatMap(res => Observable.of(res.status < 400));
   }
 
 }

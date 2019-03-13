@@ -2,6 +2,9 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { MediaProvider } from '../../providers/media/media';
 import { MyItemsPage } from '../my-items/my-items';
+import { ItemsProvider } from "../../providers/items/items";
+import { Observable } from "rxjs";
+import { DialogProvider } from "../../providers/dialog/dialog";
 
 @IonicPage()
 @Component({
@@ -11,48 +14,42 @@ import { MyItemsPage } from '../my-items/my-items';
 export class UpdateItemPage {
 
 
-  constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              public mediaProvider:MediaProvider) {
+  constructor(private navCtrl: NavController,
+              private navParams: NavParams,
+              private itemsProvider:ItemsProvider,
+              private dialog: DialogProvider) {
     this.file_id = this.navParams.get('file_id');
   }
 
   title = '';
   description = '';
-  data: {};
   file_id;
 
   @ViewChild('modifyForm') modifyForm: any;
 
 
   updateItemInfo(){
-    const description = `[d]${this.description}[/d]`;
+    const oldDescriptor = this.itemsProvider.getItem(this.file_id).flatMap(item => {
+      const oldDescriptors = item !== null ? item.descriptors : {};
+      const description = this.description;
 
-    console.log('title: ', this.title);
-    console.log('description: ', description);
-    console.log('file_id: ', this.file_id);
+      const data = {
+        "title": this.title,
+        "description": description
+      };
 
-    this.data ={
-      "title": this.title,
-      "description": description
-    };
+      return this.itemsProvider.updateItemInfo(this.file_id, data);
+    }).subscribe(response => {
 
-    this.mediaProvider.updateItemInfo(this.file_id, this.data).subscribe(response => {
-
-      console.log('upload media response', response);
-
-      if(response.message ==="File info updated"){
-        console.log('File info updated');
-        this.mediaProvider.presentToast(response.message);
+      if (response.message === "File info updated"){
+        this.dialog.presentToast(response.message);
         this.navCtrl.push(MyItemsPage);
       }
 
     });
-
   }
 
   cancelModify() {
-    console.log('reset form');
     this.modifyForm.reset();
   }
 

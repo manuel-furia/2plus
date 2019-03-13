@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Media } from '../../interfaces/media';
-import { MediaProvider } from '../../providers/media/media';
+import { Item } from "../../interfaces/item";
+import { ItemsProvider } from "../../providers/items/items";
 
 
 @IonicPage()
@@ -11,49 +11,31 @@ import { MediaProvider } from '../../providers/media/media';
 })
 export class SingleItemPage {
   public uploadUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
-  public file:Media;
+  public item: Item;
   public file_id;
   public username;
-  public mediaArray;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              public mediaProvider:MediaProvider
+              public itemsProvider:ItemsProvider
               ) {
     this.file_id = this.navParams.get('file_id');
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SingleItemPage');
   }
 
   ngOnInit(){
-    this.getSingleMedia();
+    this.getItem();
   }
 
 
-  getSingleMedia(){
-    console.log('file_id: ', this.file_id);
-    this.mediaProvider.getSingleMedia(this.file_id).subscribe(singleMedia =>{
-
-      console.log('view single media: ', singleMedia);
-
-      this.file = singleMedia;
-      console.log('media type: ', this.file.media_type);
-      console.log('user id: ', this.file.user_id);
-      console.log('file description: ', this.file.description);
-
-      this.mediaProvider.getUserInfoOfSingleFile(this.file.user_id).subscribe(userInfo=>{
-        //console.log('single media user info: ', userInfo);
-
-        this.username = userInfo.username;
-
-      });
-    })
+  getItem(){
+    this.itemsProvider.getItem(this.file_id).subscribe(item => {
+      if (item !== null) {
+        this.item = item;
+        this.username = item.user;
+      }
+    });
   }
-
-  slideOpts = {
-    effect: 'flip'
-  };
-
 }

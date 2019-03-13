@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { MediaProvider } from '../../providers/media/media';
+import { Item } from "../../interfaces/item";
 
 @Pipe({
   name: 'thumbnail',
@@ -10,20 +11,11 @@ export class ThumbnailsPipe implements PipeTransform {
 
   constructor(private mediaProvider:MediaProvider){}
 
-  async transform(file_id: number, ...args) {
+  async transform(item: Item, ...args) {
     //return value.toLowerCase();
     return new Promise((resolve, reject) => {
-      this.mediaProvider.getSingleMedia(file_id).subscribe(response=>{
-        console.log('thumbnails pipe res: ', response);
-
-        switch (args[0]) {
-          case 'large': resolve(response.thumbnails.w640); break;
-          case 'medium': resolve(response.thumbnails.w320); break;
-          case 'small': resolve(response.thumbnails.w160); break;
-          case 'screenshot': resolve(response.screenshot); break;
-          default: resolve(response.thumbnails.w160); break;
-        }
-      })
+      const media = item.otherMedia.length > 0 ? item.otherMedia[0] : item.mainMedia;
+      resolve(media.thumbnail);
     })
   }
 }

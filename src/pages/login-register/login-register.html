@@ -33,7 +33,7 @@
     <button ion-button
             class="register-btn" clear round
             style="color: deeppink"
-            (click)="showLoginFormOrRegisterForm()">Create new account
+            (click)="toggleLoginFormOrRegisterForm()">Create new account
     </button>
   </div>
 
@@ -123,7 +123,7 @@
   <div text-center *ngIf="showRegisterForm">
     <button ion-button class="register-btn" clear round
             style="color: deeppink"
-            (click)="showLoginFormOrRegisterForm()">already have an account?
+            (click)="toggleLoginFormOrRegisterForm()">already have an account?
     </button>
   </div>
 
