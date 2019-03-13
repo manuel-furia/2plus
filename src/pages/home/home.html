@@ -31,7 +31,7 @@
       <p>{{media.time_added | date: ('dd.MM.yy')}}</p>  <!--MM: month mm: minuit-->
       <p>{{media.description}}</p>
 
-      <button ion-button item-end (click)="viewBiggerImg(media.file_id)">View</button>
+      <button ion-button class="viewBtn" item-end (click)="viewBiggerImg(media.file_id)">View</button>
     </ion-item>
 
   </ion-list>

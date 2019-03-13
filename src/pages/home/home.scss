@@ -4,5 +4,9 @@ page-home {
     width: fit-content !important;
   }
 
+  .viewBtn{
+    background-color: color($colors, primary);
+    width: 80px !important;
+  }
 
 }

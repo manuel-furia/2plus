@@ -42,7 +42,8 @@
         <span class="field"><ion-icon name="phone-portrait"></ion-icon></span><span class="content">5647890654321</span>
       </ion-item>
 
-        <p *ngIf="file.description !==null"><span class="field">Description:</span> {{file.description}}</p>
+        <p *ngIf="file.description !=null && file.description != 'undefined'" text-left >
+          <span class="field">Description:</span> {{file.description}}</p>
     </ion-list>
 
   </ion-card>
