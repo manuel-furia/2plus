@@ -11,11 +11,14 @@
 
     <ion-row *ngFor="let file of files; let i = index" justify-content-center>
 
-      <ion-input type="file"
+      <ion-item>
+        <ion-input type="file"
                  text-center
                  accept="image/*, video/*, audio/*"
-                 (change)="handleChange($event, i)"
-      ></ion-input>
+                 (change)="handleChange($event, i)">
+
+        </ion-input>
+      </ion-item>
       <button type="button"
               id="cameraButton"
               *ngIf="platform.is('cordova')"
