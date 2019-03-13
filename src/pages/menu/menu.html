@@ -6,33 +6,36 @@
 
 <ion-content padding>
 
-  <ion-list>
-    <ion-row justify-content-center>
-      <button ion-button round  (click)="goToHomePage()">HOME</button>
-    </ion-row>
-    <ion-row justify-content-center>
-      <button ion-button round
-              *ngIf="userAuth.hasLoggedIn" color="secondary" (click)="goToUploadPage()">UPLOAD</button>
-    </ion-row>
-    <ion-row justify-content-center>
-      <button ion-button round  (click)="goToSearchPage()">SEARCH</button>
-    </ion-row>
-    <ion-row justify-content-center>
-      <button ion-button round  color="secondary"
-              *ngIf="userAuth.hasLoggedIn" (click)="goToMyItemsPage()">MY ITEMS</button>
-    </ion-row>
-    <ion-row justify-content-center>
-      <button ion-button round  color="secondary"
-              *ngIf="!userAuth.hasLoggedIn" (click)="goToLoginPage()">LOGIN/REGISTER</button>
-    </ion-row>
-    <ion-row justify-content-center>
-      <button ion-button round
-              *ngIf="userAuth.hasLoggedIn" (click)="goToProfilePage()">PROFILE</button>
-    </ion-row>
-    <ion-row justify-content-center>
-      <button ion-button round  color="danger"
-              *ngIf="userAuth.hasLoggedIn" (click)="logout()">LOG OUT</button>
-    </ion-row>
-  </ion-list>
+ <ion-card>
+   <ion-card-title><ion-icon name="menu"></ion-icon> Menu <ion-icon name="menu"></ion-icon></ion-card-title>
+   <ion-list>
+     <ion-row justify-content-center>
+       <button ion-button round  (click)="goToHomePage()">HOME</button>
+     </ion-row>
+     <ion-row justify-content-center>
+       <button ion-button round
+               *ngIf="userAuth.hasLoggedIn" color="secondary" (click)="goToUploadPage()">UPLOAD</button>
+     </ion-row>
+     <ion-row justify-content-center>
+       <button ion-button round  (click)="goToSearchPage()">SEARCH</button>
+     </ion-row>
+     <ion-row justify-content-center>
+       <button ion-button round  color="secondary"
+               *ngIf="userAuth.hasLoggedIn" (click)="goToMyItemsPage()">MY ITEMS</button>
+     </ion-row>
+     <ion-row justify-content-center>
+       <button ion-button round  color="secondary"
+               *ngIf="!userAuth.hasLoggedIn" (click)="goToLoginPage()">LOGIN/REGISTER</button>
+     </ion-row>
+     <ion-row justify-content-center>
+       <button ion-button round
+               *ngIf="userAuth.hasLoggedIn" (click)="goToProfilePage()">PROFILE</button>
+     </ion-row>
+     <ion-row justify-content-center>
+       <button ion-button round  color="danger"
+               *ngIf="userAuth.hasLoggedIn" (click)="logout()">LOG OUT</button>
+     </ion-row>
+   </ion-list>
+ </ion-card>
 
 </ion-content>

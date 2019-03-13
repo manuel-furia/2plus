@@ -1,8 +1,35 @@
 page-menu {
 
+  ion-content{
+    justify-content: center;
+    margin-top: 30px;
+    ion-card{
+      padding: 30px 5px;
+      border-radius: 10px !important;
+      box-shadow: 1px 3px 8px 8px #b9b9b9 !important;
+
+      ion-card-title{
+        ion-icon{
+          margin: 3px 10px !important;
+        }
+      }
+    }
+  }
+
   button{
     margin: 8px auto !important;
     padding: 20px !important;
+    &:hover{
+      background-color: color($colors, light) !important;
+      color: color($colors, dark) !important;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    ion-card{
+      width: 60% !important;
+      margin-left: 20% !important;
+    }
   }
 
 }
