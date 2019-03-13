@@ -114,7 +114,7 @@ export class MediaProvider {
     return this.http.get<User>(userInfoPath, httpOptions);
 
   }
-  
+
   /**
    * Upload a media file to the server.
    * @param data the data describing the media file

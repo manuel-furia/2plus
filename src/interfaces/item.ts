@@ -11,6 +11,6 @@ export interface Item {
   descriptors: ItemDescriptors;
   mainMedia: Media;
   otherMedia: Media[];
-  user: User;
+  user: User | null;
   time_added: string;
 }

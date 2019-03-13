@@ -172,7 +172,7 @@ export class ItemsProvider {
    */
   private buildItem(mediaResponse: MediaResponse, descriptors: ItemDescriptors): Observable<Item>{
     const mainMediaObs = this.mediaProvider.getMedia(mediaResponse.file_id);
-    const userObs = this.users.getUserInfo(mediaResponse.user_id);
+    const userObs = this.userSession.sessionPresent() ? this.users.getUserInfo(mediaResponse.user_id) : Observable.of(null);
     const mediaObs = Observable.zip(
       ...(descriptors.media_ids.map(media_id => this.mediaProvider.getMedia(media_id)))
     );

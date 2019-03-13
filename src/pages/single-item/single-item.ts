@@ -36,7 +36,12 @@ export class SingleItemPage {
     this.itemsProvider.getItem(this.file_id).subscribe(item => {
       if (item !== null) {
         this.item = item;
-        this.username = item.user.username;
+
+        if (item.user !== null)
+          this.username = item.user.username;
+        else
+          this.username = "[hidden]";
+
         this.mediaArray = item.otherMedia;
       }
     });
